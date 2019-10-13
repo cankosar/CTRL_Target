@@ -1,0 +1,4 @@
+events.c:43:6:init_events	48	static
+events.c:111:6:capture_events	40	static
+events.c:162:6:evm	16	static
+events.c:240:6:tuner_handler	0	static
