@@ -1,4 +1,0 @@
-dsp_control.c:17:6:write_bqf_param	88	static
-dsp_control.c:92:6:update_chorus	8	static
-dsp_control.c:101:6:update_delay	0	static
-dsp_control.c:109:6:update_overdrive	48	static

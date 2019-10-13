@@ -1,6 +1,0 @@
-tuner.c:94:6:visualize_cent	48	static
-tuner.c:168:6:update_note_bins	8	static
-tuner.c:214:8:calculate_cent	8	static
-tuner.c:222:9:find_note_index	8	static
-tuner.c:196:6:calculate_note	8	static
-tuner.c:40:6:update_tuner	32	static

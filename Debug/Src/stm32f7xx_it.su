@@ -1,6 +1,0 @@
-stm32f7xx_it.c:58:6:SysTick_Handler	8	static
-stm32f7xx_it.c:77:6:SPI5_IRQHandler	8	static
-stm32f7xx_it.c:85:6:TIM2_IRQHandler	8	static
-stm32f7xx_it.c:91:6:TIM3_IRQHandler	8	static
-stm32f7xx_it.c:98:6:DMA2_Stream3_IRQHandler	0	static
-stm32f7xx_it.c:108:6:DMA2_Stream4_IRQHandler	0	static
