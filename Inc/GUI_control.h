@@ -55,7 +55,7 @@ void init_tuner(void);
 void deinit_tuner(void);
 
 
-#define n_context 7
+#define n_context 11
 
 struct encoder{
 	char name[16];
@@ -75,7 +75,8 @@ struct button{
 
 struct context{
 	char name[16];
-	uint8_t fid;
+	uint8_t fid;			//Filter id
+	uint8_t bank_id;		//Bank id
 	uint16_t ctrl_offset;
 	struct button but[4];
 	struct encoder enc[3];

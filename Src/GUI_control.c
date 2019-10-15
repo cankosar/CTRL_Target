@@ -45,8 +45,11 @@ void update_encoder(uint8_t eid, int diff){ //eid=encoder id
 }
 
 void update_button(uint8_t bid){ //bid=button id
+
+
 //	printf("Update but:%d in bank %d\n",bid,bank);
 	menu[bank].but[bid].value=!(menu[bank].but[bid].value);
+
 //	printf("Set button value=%d\n",menu[bank].but[bid].value);
 	update_button_value(bid);
 	update_settings(bid,1);
@@ -98,12 +101,12 @@ void update_button_value(uint8_t bid)
 //	printf("Display button:%d in bank %d\n",bid,bank);
 	if(menu[bank].but[bid].state){ //If state==1==active
 //		printf("In bank\n");
-		if(menu[bank].but[bid].value){
+		if(menu[bank].but[bid].value==1){
 //			printf("Print on\n");
 			set_text_size(2);
 			set_text_color(active_color,0);
 			print_static("On",but_offset[bid],DP_HEIGHT-val_offset_y,6);
-		}else{
+		}else if(menu[bank].but[bid].value==0){
 //			printf("Print Off!\n");
 			set_text_size(2);
 			set_text_color(inactive_color,0);
@@ -127,7 +130,7 @@ void init_menu(void)
 
 	//Bank 0
 	strcpy(menu[0].name,"Settings");
-	menu[0].fid=2;
+	menu[0].bank_id=0;
 	menu[0].ctrl_offset=1;
 
 	strcpy(menu[0].enc[0].name,"Tuner A4");
@@ -167,6 +170,7 @@ void init_menu(void)
 
 	//Bank 1
 	strcpy(menu[1].name,"Low Mid EQ");
+	menu[1].bank_id=2;
 	menu[1].fid=2;
 	menu[1].ctrl_offset=5;
 
@@ -213,6 +217,7 @@ void init_menu(void)
 
 	//Bank 2
 	strcpy(menu[2].name,"Mid EQ");
+	menu[2].bank_id=3;
 	menu[2].fid=2;
 	menu[2].ctrl_offset=10;
 
@@ -259,6 +264,7 @@ void init_menu(void)
 
 	//Bank 3
 	strcpy(menu[3].name,"Hi Mid EQ");
+	menu[3].bank_id=4;
 	menu[3].fid=2;
 	menu[3].ctrl_offset=15;
 
@@ -304,6 +310,7 @@ void init_menu(void)
 
 	//Bank 4
 	strcpy(menu[4].name,"Delay");
+	menu[4].bank_id=5;
 //	menu[4].fid=2;
 	menu[4].ctrl_offset=20;
 
@@ -350,6 +357,7 @@ void init_menu(void)
 
 	//Bank 6
 	strcpy(menu[5].name,"Chorus");
+	menu[5].bank_id=6;
 //	menu[5].fid=2;
 	menu[5].ctrl_offset=25;
 
@@ -395,6 +403,7 @@ void init_menu(void)
 
 	//Bank 7
 	strcpy(menu[6].name,"Overdrive");
+	menu[6].bank_id=7;
 //	menu[6].fid=2;
 	menu[6].ctrl_offset=30;
 
@@ -438,6 +447,172 @@ void init_menu(void)
 	menu[6].but[3].state=0;
 	menu[6].but[3].value=0;
 
+	//Bank 7
+	strcpy(menu[7].name,"Reverb");
+	menu[7].bank_id=8;
+
+	strcpy(menu[7].enc[0].name,"Mix");
+	menu[7].enc[0].state=1;
+	menu[7].enc[0].value=10;
+	menu[7].enc[0].lower_limit=0;
+	menu[7].enc[0].upper_limit=100;
+	menu[7].enc[0].step_size=1;
+	strcpy(menu[7].enc[0].format,"%.0f");
+
+	strcpy(menu[7].enc[1].name,"Size");
+	menu[7].enc[1].state=1;
+	menu[7].enc[1].value=50;
+	menu[7].enc[1].lower_limit=0;
+	menu[7].enc[1].upper_limit=100;
+	menu[7].enc[1].step_size=1;
+	strcpy(menu[7].enc[1].format,"%.0f");
+
+	strcpy(menu[7].enc[2].name,"Damp");
+	menu[7].enc[2].state=1;
+	menu[7].enc[2].value=50;
+	menu[7].enc[2].lower_limit=0;
+	menu[7].enc[2].upper_limit=100;
+	menu[7].enc[2].step_size=1;
+	strcpy(menu[7].enc[2].format,"%.0f");
+
+	strcpy(menu[7].but[0].name,"Active");
+	menu[7].but[0].state=1;
+	menu[7].but[0].value=0;
+
+	strcpy(menu[7].but[1].name,"");
+	menu[7].but[1].state=0;
+
+	strcpy(menu[7].but[2].name,"");
+	menu[7].but[2].state=0;
+
+	strcpy(menu[7].but[3].name,"");
+	menu[7].but[3].state=0;
+
+	//Bank 8
+	strcpy(menu[8].name,"Tremolo");
+	menu[8].bank_id=9;
+
+	strcpy(menu[8].enc[0].name,"Depth");
+	menu[8].enc[0].state=1;
+	menu[8].enc[0].value=10;
+	menu[8].enc[0].lower_limit=0;
+	menu[8].enc[0].upper_limit=100;
+	menu[8].enc[0].step_size=1;
+	strcpy(menu[8].enc[0].format,"%.0f");
+
+	strcpy(menu[8].enc[1].name,"Rate");
+	menu[8].enc[1].state=1;
+	menu[8].enc[1].value=10;
+	menu[8].enc[1].lower_limit=0;
+	menu[8].enc[1].upper_limit=20;
+	menu[8].enc[1].step_size=1;
+	strcpy(menu[8].enc[1].format,"%.0f");
+
+	strcpy(menu[8].enc[2].name,"Type");
+	menu[8].enc[2].state=1;
+	menu[8].enc[2].value=1;
+	menu[8].enc[2].lower_limit=0;
+	menu[8].enc[2].upper_limit=2;
+	menu[8].enc[2].step_size=1;
+	strcpy(menu[8].enc[2].format,"%.0f");
+
+	strcpy(menu[8].but[0].name,"Active");
+	menu[8].but[0].state=1;
+	menu[8].but[0].value=0;
+
+	strcpy(menu[8].but[1].name,"");
+	menu[8].but[1].state=0;
+
+	strcpy(menu[8].but[2].name,"");
+	menu[8].but[2].state=0;
+
+	strcpy(menu[8].but[3].name,"");
+	menu[8].but[3].state=0;
+
+	//Bank 9
+	strcpy(menu[9].name,"Rotary");
+	menu[9].bank_id=10;
+
+	strcpy(menu[9].enc[0].name,"Depth");
+	menu[9].enc[0].state=1;
+	menu[9].enc[0].value=10;
+	menu[9].enc[0].lower_limit=0;
+	menu[9].enc[0].upper_limit=100;
+	menu[9].enc[0].step_size=1;
+	strcpy(menu[9].enc[0].format,"%.0f");
+
+	strcpy(menu[9].enc[1].name,"Rate");
+	menu[9].enc[1].state=1;
+	menu[9].enc[1].value=10;
+	menu[9].enc[1].lower_limit=0;
+	menu[9].enc[1].upper_limit=20;
+	menu[9].enc[1].step_size=1;
+	strcpy(menu[9].enc[1].format,"%.0f");
+
+	strcpy(menu[9].enc[2].name,"Type");
+	menu[9].enc[2].state=0;
+	menu[9].enc[2].value=1;
+	menu[9].enc[2].lower_limit=0;
+	menu[9].enc[2].upper_limit=2;
+	menu[9].enc[2].step_size=1;
+	strcpy(menu[9].enc[2].format,"%.0f");
+
+	strcpy(menu[9].but[0].name,"Active");
+	menu[9].but[0].state=1;
+	menu[9].but[0].value=0;
+
+	strcpy(menu[9].but[1].name,"");
+	menu[9].but[1].state=0;
+
+	strcpy(menu[9].but[2].name,"");
+	menu[9].but[2].state=0;
+
+	strcpy(menu[9].but[3].name,"");
+	menu[9].but[3].state=0;
+
+	//Bank 10
+	strcpy(menu[10].name,"Compressor");
+	menu[10].bank_id=11;
+
+	strcpy(menu[10].enc[0].name,"Threshold");
+	menu[10].enc[0].state=1;
+	menu[10].enc[0].value=-10;
+	menu[10].enc[0].lower_limit=-40;
+	menu[10].enc[0].upper_limit=0;
+	menu[10].enc[0].step_size=1;
+	strcpy(menu[10].enc[0].format,"%.0f");
+
+	strcpy(menu[10].enc[1].name,"Ratio");
+	menu[10].enc[1].state=1;
+	menu[10].enc[1].value=4;
+	menu[10].enc[1].lower_limit=1;
+	menu[10].enc[1].upper_limit=60;
+	menu[10].enc[1].step_size=1;
+	strcpy(menu[10].enc[1].format,"%.0f");
+
+	strcpy(menu[10].enc[2].name,"Attack");
+	menu[10].enc[2].state=1;
+	menu[10].enc[2].value=10;
+	menu[10].enc[2].lower_limit=5;
+	menu[10].enc[2].upper_limit=50;
+	menu[10].enc[2].step_size=1;
+	strcpy(menu[10].enc[2].format,"%.0f");
+
+	strcpy(menu[10].but[0].name,"Active");
+	menu[10].but[0].state=1;
+	menu[10].but[0].value=0;
+
+	strcpy(menu[10].but[1].name,"");
+	menu[10].but[1].state=0;
+
+	strcpy(menu[10].but[2].name,"");
+	menu[10].but[2].state=0;
+
+	strcpy(menu[10].but[3].name,"");
+	menu[10].but[3].state=0;
+
+
+
 	//Update active bits
 	active_bits=0;
 
@@ -445,7 +620,7 @@ void init_menu(void)
 	set_template();
 
 	//Initialize DSP sets
-	init_settings();
+//	init_settings();
 
 
 	for(int i=1;i<n_context;i++){
@@ -561,9 +736,9 @@ void update_settings(uint8_t id, uint8_t type){
 
 	if(id==0&&type==1){ //Button #0: Activating/Deactivating
 		if(menu[bank].but[0].value){
-			ctrlreg_tx[0].u32|=1<<bank; 	//Set active bits
+			ctrlreg_tx[0].u32|=1<<menu[bank].bank_id; 	//Set active bits
 		}else{
-			ctrlreg_tx[0].u32=ctrlreg_tx[0].u32&~(1<<bank);	//Set inactive bits
+			ctrlreg_tx[0].u32=ctrlreg_tx[0].u32&~(1<<menu[bank].bank_id);	//Set inactive bits
 		}
 
 		update_led();
@@ -585,9 +760,9 @@ uint32_t update_active_bits(uint8_t id, uint8_t type){
 
 	if(type==1 && id==0){
 		if(menu[bank].but[0].value){
-			active_bits|=1<<bank; 	//Set active bits
+			active_bits|=1<<menu[bank].bank_id; 	//Set active bits
 		}else{
-			active_bits=active_bits&~(1<<bank);	//Set inactive bits
+			active_bits=active_bits&~(1<<menu[bank].bank_id);	//Set inactive bits
 		}
 	}
 
@@ -787,10 +962,10 @@ void save_settings_nv(void){
 void send_update(uint8_t bank_id, uint8_t type, uint8_t ctrl_id, union ctrltypes w1, union ctrltypes w2, union ctrltypes w3, union ctrltypes w4,union ctrltypes w5){
 
 //	printf("Sending update\n");
-	ctrl_tx[0].u8[0]=bank_id;
+	ctrl_tx[0].u8[0]=menu[bank].bank_id;
 	ctrl_tx[0].u8[1]=type;
 	ctrl_tx[0].u8[2]=ctrl_id;
-	ctrlreg_tx[0].u8[3]=0;
+	ctrl_tx[0].u8[3]=0;
 
 	if(type==1){
 		ctrl_tx[1].u32=w1.u32;
