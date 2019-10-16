@@ -5,8 +5,8 @@
  *      Author: Can
  */
 
-#ifndef HW_CONFIG_H_
-#define HW_CONFIG_H_
+#ifndef HW_CONFIG_HPP_
+#define HW_CONFIG_HPP_
 
 //Display SPI pins
 #define DP_RST_PIN GPIO_PIN_8
@@ -66,12 +66,7 @@
 #define BUT5_PORT GPIOE
 #define BUT5_PIN GPIO_PIN_0
 
-//GPIO sockets of encoders
-GPIO_TypeDef* enc_GPIO_Port[4][2];
-uint16_t enc_GPIO_Pin[4][2];
 
-//GPIO sockets of buttons
-GPIO_TypeDef* but_GPIO_Port[6];
-uint16_t but_GPIO_Pin[6];
-
+#define n_enc 4
+#define n_but 6
 #endif /* HW_CONFIG_H_ */
