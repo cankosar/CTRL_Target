@@ -19,6 +19,7 @@ class c_GUI{
 		void draw_template_lines(void);
 		void update_enc_desc(uint8_t id, char* desc);
 		void update_enc_value(uint8_t id, float* val, char* format);
+		void update_but_value(uint8_t id, bool flag);
 		void update_but_desc(uint8_t id, char* desc);
 		void update_title(char* desc);
 

@@ -105,6 +105,21 @@ void c_GUI::update_enc_value(uint8_t id, float* val, char* format){
 	disp.print_num(*val,format,MAX_CHAR_VAL,dx_enc[id],DY_VAL);
 }
 
+void c_GUI::update_but_value(uint8_t id, bool flag){
+
+	//Set text size and color
+	disp.set_text_size(W_F_VAL);
+
+	if(flag){
+		disp.set_text_color(COL_ACTIVE,COL_BG);
+		//Print text
+		disp.print_static((char*)"On",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_VAL);
+	}else{
+		disp.set_text_color(COL_INACTIVE,COL_BG);
+		//Print text
+		disp.print_static((char*)"Off",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_VAL);
+	}
+}
 
 //Interrupt process
 void evm_main(void){
