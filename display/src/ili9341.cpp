@@ -9,8 +9,10 @@
 extern "C" {
 #endif
 
-
+#include "string.h"
 #include "../inc/ili9341.hpp"
+#include "../inc/font.hpp"
+
 #include "stm32f7xx_hal.h"
 #include "../../hw/inc/HW_config.hpp"
 
@@ -24,7 +26,6 @@ void c_ili9341::init(void){
 
 	//Init ili9341 chip
 	init_chip();
-
 
 }
 
@@ -167,6 +168,20 @@ void c_ili9341::send_data16(uint16_t *pdata)
 //	HAL_SPI_Transmit(&hspi3,(uint8_t*)pdata,2,1000); //Reihenfolge andersherum
 }
 
+void c_ili9341::send_data16rpt(uint16_t *pdata, uint32_t cnt)
+{
+
+//	printf("Pointer: %d\t Content: %d\n",(int)pdata, *pdata);
+//	printf("Data:%d\tCount:%ld\n",*pdata,cnt);
+	HAL_GPIO_WritePin(DP_DC_PORT,DP_DC_PIN,(GPIO_PinState)1);// D/C Pin
+	while(cnt>0){
+		HAL_SPI_Transmit(&hspi3,(uint8_t*)pdata+1,1,1000);
+		HAL_SPI_Transmit(&hspi3,(uint8_t*)pdata,1,1000);
+		cnt--;
+	}
+//	HAL_SPI_Transmit(&hspi3,(uint8_t*)pdata,2,1000); //Reihenfolge andersherum
+}
+
 void c_ili9341::print_image( const uint8_t *ptr, unsigned width, unsigned height, unsigned x1, unsigned y1 ){
 
 	unsigned idx;
@@ -182,9 +197,6 @@ void c_ili9341::print_image( const uint8_t *ptr, unsigned width, unsigned height
 	}
 
 	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)1);// CS Pin hi
-
-
-
 }
 
 void c_ili9341::set_address (uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
@@ -226,6 +238,180 @@ void c_ili9341::MX_SPI3_Init(void)
 	}
 
 }
+
+
+void c_ili9341::draw_vline(int16_t x1, int16_t y1, int16_t h, uint16_t t, uint16_t color)
+{
+
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)0);// CS Pin lo
+	if(h>0){
+		set_address(x1, y1, x1 + t-1, y1+h-1);
+		send_data16rpt(&color, ((uint32_t) t) * ((uint32_t) h));
+	}else{
+		set_address(x1, y1+h, x1 + t-1, y1-1);
+		send_data16rpt(&color, ((uint32_t) t) * ((uint32_t) -h));
+	}
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)1);// CS Pin hi
+}
+
+void c_ili9341::draw_hline(int16_t x1, int16_t y1, int16_t w, uint16_t t, uint16_t color)
+{
+
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)0);// CS Pin lo
+	if(w>0){
+		set_address(x1, y1, x1 + w-1, y1+t-1);
+		send_data16rpt(&color, ((uint32_t) t) * ((uint32_t) w));
+	}else{
+		set_address(x1 + w, y1, x1-1, y1+t-1);
+		send_data16rpt(&color, ((uint32_t) t) * ((uint32_t) -w));
+	}
+
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)1);// CS Pin hi
+}
+
+void c_ili9341::draw_rect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
+{
+
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)0);// CS Pin lo
+	set_address(x, y, x + w - 1, y + h - 1);
+	send_data16rpt(&color, ((uint32_t) w) * ((uint32_t) h));
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)1);// CS Pin hi
+}
+
+void c_ili9341::draw_char(int16_t x, int16_t y, unsigned char c, uint16_t fgcolor, uint16_t bgcolor, uint8_t size) {
+
+	//This works by unrolling the drawRect code into here
+//	printf("Address: %d %d %d %d\n",x, y, x + 6 * size - 1, y + 8 * size - 1);
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)0);// CS Pin lo
+	set_address(x, y, x + 6 * size - 1, y + 8 * size - 1);
+
+	uint8_t mask = 0x01;
+	uint16_t color;
+	uint8_t yr;
+
+
+
+
+	for (y = 0; y < 8; y++) {
+		for (yr = 0; yr < size; yr++) {
+			for (x = 0; x < 5; x++) {
+				if (font[c * 5 + x] & mask) {
+					color = fgcolor;
+				} else {
+					color = bgcolor;
+				}
+				//push pixels fast (this function has less overhead)
+				send_data16rpt(&color,size);
+			}
+			send_data16rpt(&bgcolor,size);
+		}
+		mask = mask << 1;
+	}
+
+	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)1);// CS Pin hi
+}
+
+void c_ili9341::print(char* c, uint16_t xm, uint16_t ym) {
+//	printf("Size:%d\n",strlen(c));
+	set_cursor(xm-3*textsize*strlen(c), ym-4*textsize);
+	while (*c)
+		write(*c++);
+}
+
+void c_ili9341::print_static(char* c, uint16_t xm, uint16_t ym, uint8_t xsize) {
+
+//	printf("String: \"%s\", Size: %d, Width:%d\n",c, strlen(c), xsize);
+	set_cursor(xm-3*textsize*xsize, ym-4*textsize);
+
+	//Fill the rest with spaces
+	int8_t diff_total=xsize-strlen(c);
+	int8_t prefill=diff_total/2;
+	int8_t postfill=xsize-strlen(c)-prefill;
+
+	int i;
+	char* space=" ";
+	for(i=0;i<prefill;i++){
+		write(*space);
+	}
+
+	for(i=0;i<strlen(c);i++){
+		write(c[i]);
+	}
+
+	for(i=0;i<postfill;i++){
+		write(*space);
+	}
+
+
+}
+
+void c_ili9341::write(char c) {
+
+	if (c == '\n') {
+		cursor_y += textsize * 8;
+		cursor_x = 0;
+	} else {
+		draw_char(cursor_x, cursor_y, c, textcolor, textbgcolor, textsize);
+		cursor_x += textsize * 6;
+	}
+
+}
+
+void c_ili9341::print_float(float val, char * format, uint8_t len, uint16_t xm, uint16_t ym)
+{
+	char buffer[len];
+	snprintf(buffer, sizeof buffer, format, val);
+	print(buffer,xm,ym);
+}
+
+void c_ili9341::print_num(float val, char * format, uint8_t width,uint16_t xm, uint16_t ym)
+{
+
+	char buffer[16];
+	sprintf(buffer, format, val);
+	print_static(buffer,xm,ym,width);
+
+}
+
+
+
+void c_ili9341::print_int(int16_t val, char * format, uint8_t len, uint16_t xm, uint16_t ym)
+{
+	char buffer[len];
+	snprintf(buffer, sizeof buffer, format, val);
+	print(buffer,xm,ym);
+}
+
+
+void c_ili9341::set_cursor(int16_t x, int16_t y) {
+//	printf("Setting cursor to x: %d \t y:%d\n",x,y);
+	cursor_x = x;
+	cursor_y = y;
+}
+
+void c_ili9341::set_text_size(uint8_t s) {
+	textsize = s;
+}
+
+void c_ili9341::set_text_color(uint16_t c, uint16_t b) {
+	textcolor = c;
+	textbgcolor = b;
+}
+
+/*Calculates the RGB565 code*/
+/*R,G,B: 0-100*/
+uint16_t c_ili9341::calc_RGB565(uint8_t r,uint8_t g,uint8_t b){
+	return (r*31/100)<<11|(g*63/100)<<5|(b*31/100);
+}
+
+
+
+
+
+
+
+
+
 
 #ifdef __cplusplus
 }

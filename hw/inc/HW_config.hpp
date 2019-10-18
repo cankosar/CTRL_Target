@@ -69,4 +69,15 @@
 
 #define n_enc 4
 #define n_but 6
+
+//Positions of the buttons
+#define DX_ENC0 53
+#define DX_ENC1 160
+#define DX_ENC2 267
+
+#define DX_BUT0 40
+#define DX_BUT1 120
+#define DX_BUT2 200
+#define DX_BUT3 280
+
 #endif /* HW_CONFIG_H_ */
