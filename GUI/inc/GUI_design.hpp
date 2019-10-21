@@ -50,11 +50,4 @@
 #define COL_ACTIVE 0xD7F8
 #define COL_INACTIVE 0xFE38
 
-
-
-
-
-
-
-
 #endif /* INC_GUI_DESIGN_HPP_ */
