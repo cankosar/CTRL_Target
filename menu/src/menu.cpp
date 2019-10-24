@@ -10,71 +10,85 @@
 extern "C" {
 #endif
 
-#include "../inc/bank.hpp"
 #include "../inc/menu.hpp"
+#include "../../GUI/inc/GUI.hpp"
 
-s_bank menu[n_bank];
+extern c_GUI GUI;
+extern c_com_ctrl com;
 
 void c_menu::init(void){
 
-	/*
-			Bank 0: General
-	*/
-	menu[i_general].name=			"General";
-	menu[i_general].id=				0;
-	menu[i_general].status=			1;
+	//Load presets
+	load_presets();
 
-	//Encoder 0
-	menu[i_general].enc[0].name=	"F Tune";
-	menu[i_general].enc[0].status=	1;
-	menu[i_general].enc[0].value=	440;
-	menu[i_general].enc[0].min=		430;
-	menu[i_general].enc[0].max=		450;
-	menu[i_general].enc[0].step=	1;
-	menu[i_general].enc[0].format=	"%.0f";
+}
 
-	//Encoder 1
-	menu[i_general].enc[1].name=	"Volume";
-	menu[i_general].enc[1].status=	1;
-	menu[i_general].enc[1].value=	50;
-	menu[i_general].enc[1].min=		0;
-	menu[i_general].enc[1].max=		100;
-	menu[i_general].enc[1].step=	1;
-	menu[i_general].enc[1].format=	"%.0f";
+void c_menu::update_encoder(uint8_t eid, int8_t val){
 
-	//Encoder 2
-	menu[i_general].enc[2].name=	"";
-	menu[i_general].enc[2].status=	0;
-	menu[i_general].enc[2].value=	50;
-	menu[i_general].enc[2].min=		0;
-	menu[i_general].enc[2].max=		100;
-	menu[i_general].enc[2].step=	1;
-	menu[i_general].enc[2].format=	"%.0f";
+	//Update the value
+	float new_val=banks[act_bank].enc[eid].add_value((float)val);
 
-	//Button 0
-	menu[i_general].but[0].name=	"Active";
-	menu[i_general].but[0].status=	1;
-	menu[i_general].but[0].value=	1;
+	//Update GUI
+	GUI.update_enc_value(eid,&new_val,banks[act_bank].enc[eid].format);
 
-	//Button 1
-	menu[i_general].but[1].name=	"";
-	menu[i_general].but[1].status=	0;
-	menu[i_general].but[1].value=	1;
+	//Transmit the change to the DSP-uC
+	send_word.f32=new_val;
+	com.send_update(act_bank,0,eid,send_word);
+	//Update NV RAM
 
-	//Button 2
-	menu[i_general].but[2].name=	"";
-	menu[i_general].but[2].status=	0;
-	menu[i_general].but[2].value=	1;
+}
 
-	//Button 3
-	menu[i_general].but[3].name=	"";
-	menu[i_general].but[3].status=	0;
-	menu[i_general].but[3].value=	1;
+void c_menu::update_button(uint8_t bid){
 
+	//Update the value
+	bool new_val=banks[act_bank].but[bid].toggle_value();
+
+	//Update active bits
+	send_word.u32=update_active_bits(act_bank,new_val);
+
+	//Update the GUI
+	GUI.update_but_value(bid,new_val);
+
+	//Transmit the change to the DSP-uC
+	com.send_update(act_bank,1,bid,send_word);
+
+	//Update the non-volatile memory
+
+
+}
+
+uint32_t c_menu::update_active_bits(uint8_t bank_id, bool val){
+
+	if(val){
+		active_bits|=1<<bank_id; 		//Set active bits
+	}else{
+		active_bits&=(~(1<<bank_id));	//Set inactive bits
+	}
+
+	return active_bits;
+}
+
+void c_menu::toggle_dsp(void){
+
+	//Toggle value
+	dsp_state=banks[i_general].but[bid_active].toggle_value();
+}
+
+void c_menu::toggle_mute(void){
+
+	//Activate tuner
+	mute_state=!(banks[i_tuner].but[bid_active].toggle_value());
+
+
+}
+
+void c_menu::update_ui_context(uint8_t val){
 
 
 
 }
+
+
 
 
 #ifdef __cplusplus

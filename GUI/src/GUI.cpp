@@ -95,7 +95,7 @@ void  c_GUI::update_title(char* desc){
 	disp.print_static(desc,DP_WIDTH/2,DP_HEIGHT/2,MAX_CHAR_TITLE);
 }
 
-void c_GUI::update_enc_value(uint8_t id, float* val, char* format){
+void c_GUI::update_enc_value(uint8_t id, float* val, const char* format){
 
 	//Set text size and color
 	disp.set_text_size(W_F_VAL);

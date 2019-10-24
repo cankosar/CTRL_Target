@@ -328,8 +328,8 @@ void c_ili9341::print_static(char* c, uint16_t xm, uint16_t ym, uint8_t xsize) {
 	int8_t prefill=diff_total/2;
 	int8_t postfill=xsize-strlen(c)-prefill;
 
-	int i;
-	char* space=" ";
+	uint16_t i;
+	const char* space=" ";
 	for(i=0;i<prefill;i++){
 		write(*space);
 	}
@@ -364,7 +364,7 @@ void c_ili9341::print_float(float val, char * format, uint8_t len, uint16_t xm, 
 	print(buffer,xm,ym);
 }
 
-void c_ili9341::print_num(float val, char * format, uint8_t width,uint16_t xm, uint16_t ym)
+void c_ili9341::print_num(float val, const char * format, uint8_t width,uint16_t xm, uint16_t ym)
 {
 
 	char buffer[16];

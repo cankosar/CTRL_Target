@@ -13,6 +13,25 @@ extern "C" {
 #include "../inc/bank.hpp"
 
 
+float c_enc::add_value(float val){
+
+	value+=val;
+
+	if(value<min){
+		value=min;
+	}else if(value>max){
+		value=max;
+	}
+
+	return value;
+}
+
+bool c_but::toggle_value(void){
+
+	value=!value;
+
+	return value;
+}
 
 
 

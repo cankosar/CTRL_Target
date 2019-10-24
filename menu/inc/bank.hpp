@@ -11,7 +11,10 @@
 #include "stm32f7xx_hal.h"
 #include "../../hw/inc/HW_config.hpp"
 
-struct s_enc{
+class c_enc{
+
+	public:
+		float add_value(float val);
 
 		bool status;
 		const char* name;
@@ -22,7 +25,10 @@ struct s_enc{
 		const char* format;
 };
 
-struct s_but{
+class c_but{
+
+	public:
+		bool toggle_value(void);
 
 		const char* name;
 		bool status;
@@ -32,8 +38,8 @@ struct s_but{
 struct s_bank{
 
 		//Encoder and button instances
-		s_enc enc[n_enc];
-		s_but but[n_but];
+		c_enc enc[n_enc];
+		c_but but[n_but];
 
 		//Bank parameters
 		const char* name;

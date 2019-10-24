@@ -24,7 +24,7 @@ class c_ili9341{
 		void set_text_size(uint8_t s);
 		void set_text_color(uint16_t c, uint16_t b);
 		void print_static(char* c, uint16_t xm, uint16_t ym, uint8_t xsize);
-		void print_num(float val, char * format, uint8_t width,uint16_t xm, uint16_t ym);
+		void print_num(float val, const char * format, uint8_t width,uint16_t xm, uint16_t ym);
 
 	private:
 		//Methods

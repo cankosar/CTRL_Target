@@ -11,6 +11,8 @@ extern "C" {
 
 #include "../inc/evm.hpp"
 #include "../inc/evm_common.hpp"
+
+#include "../../menu/inc/menu.hpp"
 //#include "../../hw/inc/HW_handlers.hpp"
 
 //GPIO sockets of encoders
@@ -21,6 +23,7 @@ extern uint16_t enc_GPIO_Pin[n_enc][2];
 extern GPIO_TypeDef* but_GPIO_Port[n_but];
 extern uint16_t but_GPIO_Pin[n_but];
 
+c_menu menu;
 
 void c_evm::capture(void){
 
@@ -95,11 +98,10 @@ void c_evm::process(void){
 
 				/*******BEGIN Process encoder changes********/
 				if(last_enc_id==3){					//Enc ID 3 is context encoder
-//					update_ui_context(getval);
+					menu.update_ui_context(getval);
 				}else{
-//					update_encoder(last_enc_id,getval);
+					menu.update_encoder(last_enc_id,getval);
 				}
-//				test_counter(1,last_enc_id,getval);
 				/*******END Process encoder changes********/
 
 
@@ -117,14 +119,13 @@ void c_evm::process(void){
 
 					/*******BEGIN Process button changes********/
 					if(last_but_id==4){
-//						toggle_dsp();
+						menu.toggle_dsp();
 					}else if(last_but_id==5){
-//						toggle_mute();
+						menu.toggle_mute();
 					}else{
-//						update_button(last_but_id);
+						menu.update_button(last_but_id);
 					}
 
-					//test_counter(0,last_but_id,0);
 					/*******END Process button changes********/
 
 					//last_but_id=0;						//Unset last button id //Obsolete
@@ -148,8 +149,6 @@ void c_evm::process(void){
 			tuner_update_lock=0;						//Unlock tuner update
 		}
 	}
-
-
 }
 
 

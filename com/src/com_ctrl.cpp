@@ -16,6 +16,8 @@ extern "C" {
 //extern DMA_HandleTypeDef hdma_spi5_rx;
 extern SPI_HandleTypeDef hspi5;
 
+extern c_com_ctrl com;
+
 void c_com_ctrl::init(void){
 
 	//Initialize SPI for communication
@@ -49,7 +51,28 @@ void c_com_ctrl::MX_SPI5_Init(void)
 
 }
 
+void c_com_ctrl::send_update(uint8_t bank_id, bool type, uint8_t ctrl_id, union ctrltypes w){
 
+//	printf("Sending update\n");
+	ctrl_tx[0].u8[0]=bank_id;
+	ctrl_tx[0].u8[1]=type;
+	ctrl_tx[0].u8[2]=ctrl_id;
+	ctrl_tx[0].u8[3]=0;
+
+	if(type==1){
+		ctrl_tx[1].u32=w.u32;
+//		printf("Button incoming:%lu float=%lu\n",ctrl_tx[1].u32, w1.u32);
+	}else{
+		ctrl_tx[1].f32=w.f32;
+	}
+
+//	printf("Hash set %d\n",ctrl_tx[0].u32);
+
+	HAL_SPI_Transmit(&hspi5, (uint8_t*) ctrl_tx, l_ctrl*4, SPI_TIMEOUT);
+
+//	printf("Update sent\n");
+
+}
 
 
 #ifdef __cplusplus
