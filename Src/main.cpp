@@ -13,10 +13,13 @@ extern "C" {
 
 #include "../hw/inc/sysconfigs.hpp"
 #include "../GUI/inc/GUI.hpp"
+#include "../menu/inc/menu.hpp"
 
 c_sysconfig sysconfig;
 
 c_GUI GUI;
+
+extern c_menu menu;
 
 //Main routine
 int main(void)
@@ -27,6 +30,9 @@ int main(void)
 
 	//Init GUI
 	GUI.init();
+
+	//Init menu
+	menu.init();
 
 	//Start GUI
 	GUI.start();

@@ -70,6 +70,9 @@
 #define n_enc 4
 #define n_but 6
 
+#define n_enc_menu 3
+#define n_but_menu 4
+
 //Positions of the buttons
 #define DX_ENC0 53
 #define DX_ENC1 160

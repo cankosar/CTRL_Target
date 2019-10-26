@@ -17,11 +17,11 @@ class c_GUI{
 		void init(void);
 		void start(void);
 		void draw_template_lines(void);
-		void update_enc_desc(uint8_t id, char* desc);
+		void update_enc_desc(uint8_t id, const char* desc);
 		void update_enc_value(uint8_t id, float* val, const char* format);
 		void update_but_value(uint8_t id, bool flag);
-		void update_but_desc(uint8_t id, char* desc);
-		void update_title(char* desc);
+		void update_but_desc(uint8_t id, const char* desc);
+		void update_title(const char* desc);
 
 	private:
 

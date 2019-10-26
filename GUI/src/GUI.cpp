@@ -65,7 +65,7 @@ void c_GUI::draw_template_lines(void){
 }
 
 
-void c_GUI::update_enc_desc(uint8_t id, char* desc){
+void c_GUI::update_enc_desc(uint8_t id, const char* desc){
 
 	//Set text size and color
 	disp.set_text_size(W_F_DESC);
@@ -75,7 +75,7 @@ void c_GUI::update_enc_desc(uint8_t id, char* desc){
 	disp.print_static(desc,dx_enc[id],DY_DESC,MAX_CHAR_DESC);
 }
 
-void c_GUI::update_but_desc(uint8_t id, char* desc){
+void c_GUI::update_but_desc(uint8_t id, const char* desc){
 
 	//Set text size and color
 	disp.set_text_size(W_F_DESC);
@@ -85,7 +85,7 @@ void c_GUI::update_but_desc(uint8_t id, char* desc){
 	disp.print_static(desc,dx_but[id],DP_HEIGHT-DY_DESC,MAX_CHAR_DESC);
 }
 
-void  c_GUI::update_title(char* desc){
+void  c_GUI::update_title(const char* desc){
 
 	//Set text size and color
 	disp.set_text_size(W_F_TITLE);

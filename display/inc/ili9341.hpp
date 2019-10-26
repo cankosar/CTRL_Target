@@ -23,7 +23,7 @@ class c_ili9341{
 		void draw_rect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
 		void set_text_size(uint8_t s);
 		void set_text_color(uint16_t c, uint16_t b);
-		void print_static(char* c, uint16_t xm, uint16_t ym, uint8_t xsize);
+		void print_static(const char* c, uint16_t xm, uint16_t ym, uint8_t xsize);
 		void print_num(float val, const char * format, uint8_t width,uint16_t xm, uint16_t ym);
 
 	private:
@@ -36,7 +36,7 @@ class c_ili9341{
 		void send_data16rpt(uint16_t *pdata, uint32_t cnt);
 		void set_address (uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 		void draw_char(int16_t x, int16_t y, unsigned char c, uint16_t fgcolor, uint16_t bgcolor, uint8_t size);
-		void print(char* c, uint16_t xm, uint16_t ym);
+		void print(const char* c, uint16_t xm, uint16_t ym);
 		void write(char c);
 		void print_float(float val, char * format, uint8_t len, uint16_t xm, uint16_t ym);
 		void print_int(int16_t val, char * format, uint8_t len, uint16_t xm, uint16_t ym);

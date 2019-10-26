@@ -311,14 +311,14 @@ void c_ili9341::draw_char(int16_t x, int16_t y, unsigned char c, uint16_t fgcolo
 	HAL_GPIO_WritePin(DP_CS_PORT,DP_CS_PIN,(GPIO_PinState)1);// CS Pin hi
 }
 
-void c_ili9341::print(char* c, uint16_t xm, uint16_t ym) {
+void c_ili9341::print(const char* c, uint16_t xm, uint16_t ym) {
 //	printf("Size:%d\n",strlen(c));
 	set_cursor(xm-3*textsize*strlen(c), ym-4*textsize);
 	while (*c)
 		write(*c++);
 }
 
-void c_ili9341::print_static(char* c, uint16_t xm, uint16_t ym, uint8_t xsize) {
+void c_ili9341::print_static(const char* c, uint16_t xm, uint16_t ym, uint8_t xsize) {
 
 //	printf("String: \"%s\", Size: %d, Width:%d\n",c, strlen(c), xsize);
 	set_cursor(xm-3*textsize*xsize, ym-4*textsize);

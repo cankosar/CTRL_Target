@@ -42,6 +42,7 @@ class c_menu{
 		void load_presets(void);
 		void update_encoder(uint8_t eid, int8_t val);
 		void update_button(uint8_t bid);
+		void init_ui_context(void);
 		void update_ui_context(uint8_t val);
 		void toggle_dsp(void);
 		void toggle_mute(void);
