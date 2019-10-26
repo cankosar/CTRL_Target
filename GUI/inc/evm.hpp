@@ -13,11 +13,12 @@
 class c_evm{
 
 	public:
+		void init(void);
 		void capture(void);
+		void update_tuner(void);
 		void process(void);
 
 	private:
-		bool capture_status;
 		bool UI_updated;
 		//Button update table
 		uint8_t t_but_update;
@@ -46,8 +47,7 @@ class c_evm{
 		bool P_LOCK;
 
 		//States
-		bool mute_state;
-		bool tnr_update;
+		bool f_tnr_update;
 		bool tuner_update_lock;
 
 		int16_t enc[n_enc];

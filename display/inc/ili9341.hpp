@@ -11,8 +11,7 @@
 #include "stm32f7xx_hal.h"
 
 
-#define DP_WIDTH 320
-#define DP_HEIGHT 240
+
 class c_ili9341{
 
 	public:
@@ -42,7 +41,7 @@ class c_ili9341{
 		void print_int(int16_t val, char * format, uint8_t len, uint16_t xm, uint16_t ym);
 		void set_cursor(int16_t x, int16_t y);
 
-		uint16_t calc_RGB565(uint8_t r,uint8_t g,uint8_t b);
+//		uint16_t calc_RGB565(uint8_t r,uint8_t g,uint8_t b);
 		//Variables
 		int16_t cursor_x, cursor_y;
 		uint16_t textsize,textcolor,textbgcolor;

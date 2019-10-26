@@ -26,6 +26,8 @@ void c_ili9341::init(void){
 
 	//Init ili9341 chip
 	init_chip();
+	//Init twice for stability reasons
+	init_chip();
 
 }
 
@@ -397,19 +399,6 @@ void c_ili9341::set_text_color(uint16_t c, uint16_t b) {
 	textcolor = c;
 	textbgcolor = b;
 }
-
-/*Calculates the RGB565 code*/
-/*R,G,B: 0-100*/
-uint16_t c_ili9341::calc_RGB565(uint8_t r,uint8_t g,uint8_t b){
-	return (r*31/100)<<11|(g*63/100)<<5|(b*31/100);
-}
-
-
-
-
-
-
-
 
 
 

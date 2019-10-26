@@ -15,7 +15,7 @@ extern "C" {
 
 float c_enc::add_value(float val){
 
-	value+=val;
+	value+=val*step;
 
 	if(value<min){
 		value=min;

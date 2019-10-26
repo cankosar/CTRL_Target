@@ -25,54 +25,121 @@ extern uint16_t but_GPIO_Pin[n_but];
 
 c_menu menu;
 
+void c_evm::init(void){
+
+	//Process lock on
+		P_LOCK=1;
+
+		//Event triggers
+		UI_updated=0;
+		//Button update table
+		t_but_update=0;
+		//Encoder update table
+		t_enc_update=0;
+
+		//Port&Pins for encoder 0
+		enc_GPIO_Port[0][0]=ENC0A_PORT;
+		enc_GPIO_Pin[0][0]=ENC0A_PIN;
+		enc_GPIO_Port[0][1]=ENC0B_PORT;
+		enc_GPIO_Pin[0][1]=ENC0B_PIN;
+
+		//Port&Pins for encoder 1
+		enc_GPIO_Port[1][0]=ENC1A_PORT;
+		enc_GPIO_Pin[1][0]=ENC1A_PIN;
+		enc_GPIO_Port[1][1]=ENC1B_PORT;
+		enc_GPIO_Pin[1][1]=ENC1B_PIN;
+
+		//Port&Pins for encoder 2
+		enc_GPIO_Port[2][0]=ENC2A_PORT;
+		enc_GPIO_Pin[2][0]=ENC2A_PIN;
+		enc_GPIO_Port[2][1]=ENC2B_PORT;
+		enc_GPIO_Pin[2][1]=ENC2B_PIN;
+
+		//Port&Pins for encoder 3
+		enc_GPIO_Port[3][0]=ENC3A_PORT;
+		enc_GPIO_Pin[3][0]=ENC3A_PIN;
+		enc_GPIO_Port[3][1]=ENC3B_PORT;
+		enc_GPIO_Pin[3][1]=ENC3B_PIN;
+
+		//Initialize grey codes of encoders
+		for(int i=0;i<4;i++){
+			//Evaluate grey code
+			enc_greycode[i]=(HAL_GPIO_ReadPin(enc_GPIO_Port[i][0],enc_GPIO_Pin[i][0])<<1);
+			enc_greycode[i]|=HAL_GPIO_ReadPin(enc_GPIO_Port[i][1],enc_GPIO_Pin[i][1]);
+			enc_greycode[i]|=(HAL_GPIO_ReadPin(enc_GPIO_Port[i][0],enc_GPIO_Pin[i][0])<<3);
+			enc_greycode[i]|=(HAL_GPIO_ReadPin(enc_GPIO_Port[i][0],enc_GPIO_Pin[i][0])<<2);
+		}
+
+		//Port&Pins for button 0
+		but_GPIO_Port[0]=BUT0_PORT;
+		but_GPIO_Pin[0]=BUT0_PIN;
+		//Port&Pins for GPIOC 1
+		but_GPIO_Port[1]=BUT1_PORT;
+		but_GPIO_Pin[1]=BUT1_PIN;
+		//Port&Pins for button 2
+		but_GPIO_Port[2]=BUT2_PORT;
+		but_GPIO_Pin[2]=BUT2_PIN;
+		//Port&Pins for button 3
+		but_GPIO_Port[3]=BUT3_PORT;
+		but_GPIO_Pin[3]=BUT3_PIN;
+		//Port&Pins for button 4
+		but_GPIO_Port[4]=BUT4_PORT;
+		but_GPIO_Pin[4]=BUT4_PIN;
+		//Port&Pins for button 5
+		but_GPIO_Port[5]=BUT5_PORT;
+		but_GPIO_Pin[5]=BUT5_PIN;
+
+		P_LOCK=0;
+}
+
 void c_evm::capture(void){
 
-
-	if(capture_status){
 	//Capture encoders
-		for(int i=0;i<n_enc;i++){
-			//Evaluate grey code
-			enc_greycode[i]=0b00001100&(enc_greycode[i]<<2);	//Shift to left by 2
-			enc_greycode[i]=enc_greycode[i]|(HAL_GPIO_ReadPin(enc_GPIO_Port[i][0],enc_GPIO_Pin[i][0])<<1);		//Put the first pin value to the second place from right
-			enc_greycode[i]=enc_greycode[i]|HAL_GPIO_ReadPin(enc_GPIO_Port[i][1],enc_GPIO_Pin[i][1]);			//Put the first pin value to the right
+	for(int i=0;i<n_enc;i++){
+		//Evaluate grey code
+		enc_greycode[i]=0b00001100&(enc_greycode[i]<<2);	//Shift to left by 2
+		enc_greycode[i]=enc_greycode[i]|(HAL_GPIO_ReadPin(enc_GPIO_Port[i][0],enc_GPIO_Pin[i][0])<<1);		//Put the first pin value to the second place from right
+		enc_greycode[i]=enc_greycode[i]|HAL_GPIO_ReadPin(enc_GPIO_Port[i][1],enc_GPIO_Pin[i][1]);			//Put the first pin value to the right
 
-			//Get the counter value of the grey code counter
-			ctr=lut[enc_greycode[i]];
+		//Get the counter value of the grey code counter
+		ctr=lut[enc_greycode[i]];
 
-			//Take action if any changes
-			if(ctr!=0){
-				enc_fifo[i]=enc_fifo[i]+ctr;
-	//			printf("Update enc %d:%d\n",i,enc_fifo[i]);
-				//Save the encoders which are affected
-				t_enc_update=t_enc_update|(1<<i);
-				//Set GUI update
-				UI_updated=1;
-			}
+		//Take action if any changes
+		if(ctr!=0){
+			enc_fifo[i]=enc_fifo[i]+ctr;
+//			printf("Update enc %d:%d\n",i,enc_fifo[i]);
+			//Save the encoders which are affected
+			t_enc_update=t_enc_update|(1<<i);
+			//Set GUI update
+			UI_updated=1;
 		}
-
-		//Capture buttons
-		for(int k=0;k<n_but;k++){
-			//Debounce
-			if(!HAL_GPIO_ReadPin(but_GPIO_Port[k],but_GPIO_Pin[k])){	//If button pressed (polarity high)
-			  tic[k]=HAL_GetTick();										//Set counter start
-			  release[k]=1;												//Release lock
-			}else if(release[k]&&HAL_GetTick()>tic[k]+t_debounce){		//If release time filled
-			  key_debounced[k]=1;										//Set key debounced flag
-			  release[k]=0;												//Unrelease
-			}
-
-			//Action
-			if(key_debounced[k]){										//If debounced
-			  t_but_update=t_but_update|(1<<k);							//Update corresponding button flag
-	//		  printf("Button %d update\n",k);
-			  key_debounced[k]=0;										//Unset debounced flag
-			  UI_updated=1;												//Set updated flag
-			}
-		}
-
-
 	}
 
+	//Capture buttons
+	for(int k=0;k<n_but;k++){
+		//Debounce
+		if(!HAL_GPIO_ReadPin(but_GPIO_Port[k],but_GPIO_Pin[k])){	//If button pressed (polarity high)
+		  tic[k]=HAL_GetTick();										//Set counter start
+		  release[k]=1;												//Release lock
+		}else if(release[k]&&HAL_GetTick()>tic[k]+t_debounce){		//If release time filled
+		  key_debounced[k]=1;										//Set key debounced flag
+		  release[k]=0;												//Unrelease
+		}
+
+		//Action
+		if(key_debounced[k]){										//If debounced
+		  t_but_update=t_but_update|(1<<k);							//Update corresponding button flag
+//		  printf("Button %d update\n",k);
+		  key_debounced[k]=0;										//Unset debounced flag
+		  UI_updated=1;												//Set updated flag
+		}
+	}
+}
+
+void c_evm::update_tuner(void){
+
+	//Raise update flag
+	f_tnr_update=1;
 }
 
 
@@ -141,11 +208,11 @@ void c_evm::process(void){
 
 
 	//Tuner processing
-	if(mute_state && !tuner_update_lock){				//Mute active=>Turn on tuner
-		if(tnr_update){									//Tuner update request on
+	if(menu.mute_state && !tuner_update_lock){			//Mute active=>Turn on tuner
+		if(f_tnr_update){								//Tuner update request on
 			tuner_update_lock=1;						//Lock tuner update
-//			update_tuner();								//Update tuner
-			tnr_update=0;								//Raise down the tuner update request
+			menu.tuner.update();						//Update tuner
+			f_tnr_update=0;								//Raise down the tuner update request
 			tuner_update_lock=0;						//Unlock tuner update
 		}
 	}

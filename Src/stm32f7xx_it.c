@@ -76,7 +76,7 @@ void SysTick_Handler(void)
 void SPI5_IRQHandler(void)
 {
 
-	printf("SPI IRQ\n");
+//	printf("SPI IRQ\n");
   HAL_SPI_IRQHandler(&hspi5);
 
 }
@@ -89,7 +89,7 @@ void TIM2_IRQHandler(void)
 
 void TIM3_IRQHandler(void)
 {
-//	tuner_handler();
+	evm_tuner();
 	HAL_TIM_IRQHandler(&htim3);
 }
 

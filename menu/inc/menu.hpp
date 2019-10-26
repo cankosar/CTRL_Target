@@ -10,9 +10,10 @@
 
 #include "stm32f7xx_hal.h"
 #include "../inc/bank.hpp"
+#include "../inc/tuner.hpp"
 #include "../../com/inc/com_ctrl.hpp"
 
-#define n_bank 13
+#define n_bank 16
 
 #define i_general 	0
 #define i_tuner 	1
@@ -34,6 +35,8 @@
 //General button ids
 #define bid_active 0
 
+#define eid_freqA 0
+
 class c_menu{
 
 	public:
@@ -43,19 +46,23 @@ class c_menu{
 		void update_encoder(uint8_t eid, int8_t val);
 		void update_button(uint8_t bid);
 		void init_ui_context(void);
-		void update_ui_context(uint8_t val);
+		void update_ui_context(int8_t val);
 		void toggle_dsp(void);
 		void toggle_mute(void);
-
-	private:
-		uint32_t update_active_bits(uint8_t bank_id, bool val);
-
-		//Variables
-		uint8_t act_bank;
 
 		//States
 		bool mute_state;
 		bool dsp_state;
+
+		//Tuner
+		c_tuner tuner;
+
+	private:
+		inline uint8_t mod_positive(int a, int b) { return (a % b + b) % b; }
+		uint32_t update_active_bits(uint8_t bank_id, bool val);
+
+		//Variables
+		uint8_t act_bank;
 
 		//Menu
 		s_bank banks[n_bank];

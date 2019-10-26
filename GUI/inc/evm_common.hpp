@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 void evm_main(void);
-
+void evm_tuner(void);
 
 #ifdef __cplusplus
 }
