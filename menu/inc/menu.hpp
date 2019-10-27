@@ -37,6 +37,25 @@
 
 #define eid_freqA 0
 
+struct s_preset{
+
+	//Active bits
+	uint32_t active_bits;
+
+	//States
+	bool dsp_state;
+	bool mute_state;
+
+	//Active bank
+	uint8_t act_bank;
+
+	//Encoder values
+	float encval[n_bank][n_enc_menu];
+
+};
+
+//s_preset backup_pset;
+
 class c_menu{
 
 	public:
@@ -54,10 +73,22 @@ class c_menu{
 		bool mute_state;
 		bool dsp_state;
 
+		//Flag indicating the state of capture
+		bool capture_state=0;
+
 		//Tuner
 		c_tuner tuner;
 
 	private:
+
+		//Presets
+		void save_backup(void);
+		void load_backup(void);
+		void load_active_banks(uint32_t active_bits);
+		void init_DSP_settings(void);
+
+		s_preset backup_preset;
+
 		inline uint8_t mod_positive(int a, int b) { return (a % b + b) % b; }
 		uint32_t update_active_bits(uint8_t bank_id, bool val);
 

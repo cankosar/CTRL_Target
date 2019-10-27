@@ -10,6 +10,7 @@
 
 #include "stm32f7xx_hal.h"
 #include "../../hw/inc/HW_config.hpp"
+#include "../inc/LED_RGB.hpp"
 
 class c_GUI{
 
@@ -28,6 +29,8 @@ class c_GUI{
 		void update_frequency(float freq);
 		void update_note(const char* act_note);
 		void visualize_cent(bool valid,float act_cent);
+
+		c_LED_RGB LED;
 
 	private:
 		//Methods

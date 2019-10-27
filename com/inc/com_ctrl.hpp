@@ -24,8 +24,14 @@ class c_com_ctrl{
 	public:
 		void init(void);
 		void send_update(uint8_t bank_id, bool type, uint8_t ctrl_id, union ctrltypes w);
+		void request_update(void);
+
+		//PA
+		void set_PA_status(bool flag);
 
 	private:
+		void setup_DSP_com(void);
+
 		void MX_SPI5_Init(void);
 
 		union ctrltypes ctrl_tx[l_ctrl];

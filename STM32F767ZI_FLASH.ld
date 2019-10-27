@@ -152,8 +152,6 @@ SECTIONS
     . = ALIGN(4);
   } >RAM
 
-  
-
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {

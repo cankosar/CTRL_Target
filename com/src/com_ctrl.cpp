@@ -10,6 +10,7 @@ extern "C" {
 #endif
 
 #include "stm32f7xx_hal.h"
+#include "../../hw/inc/HW_config.hpp"
 #include "../inc/com_ctrl.hpp"
 
 //extern DMA_HandleTypeDef hdma_spi5_tx;
@@ -22,6 +23,35 @@ void c_com_ctrl::init(void){
 
 	//Initialize SPI for communication
 	MX_SPI5_Init();
+
+	//Set up the communication to DSP
+	setup_DSP_com();
+
+	//Set PA status
+	set_PA_status(1);
+
+}
+
+void c_com_ctrl::setup_DSP_com(void){
+
+	//Set up the DSP communication
+
+//	while(1){
+//		request_update();
+//		if(condition is fit){
+//			printf("Communication to DSP is up!\n");
+//			break;
+//		}else{
+//			HAL_Delay(100);
+//		}
+//	}
+
+}
+
+
+void c_com_ctrl::set_PA_status(bool flag){
+
+	HAL_GPIO_WritePin(PA_Standby_Port,PA_Standby_PIN,(GPIO_PinState)!flag);		// Set status
 
 
 }
@@ -71,6 +101,12 @@ void c_com_ctrl::send_update(uint8_t bank_id, bool type, uint8_t ctrl_id, union 
 	HAL_SPI_Transmit(&hspi5, (uint8_t*) ctrl_tx, l_ctrl*4, SPI_TIMEOUT);
 
 //	printf("Update sent\n");
+
+}
+
+void c_com_ctrl::request_update(void){
+
+	HAL_SPI_Receive(&hspi5, (uint8_t*) ctrl_rx, l_ctrl*4, SPI_TIMEOUT);
 
 }
 

@@ -69,6 +69,19 @@ void c_menu::load_presets(void){
 	banks[i_general].but[3].status=	0;
 	banks[i_general].but[3].value=	1;
 
+	/*
+			Bank 0: Tuner
+	*/
+	banks[i_tuner].name=			"General";
+	banks[i_tuner].id=				1;
+	banks[i_tuner].status=			1;
+
+	//Button 0
+	banks[i_tuner].but[0].name=	"Active";
+	banks[i_tuner].but[0].status=	1;
+	banks[i_tuner].but[0].value=	0;
+
+
 
 	/*
 			Bank 1: Low Shelf
@@ -564,7 +577,7 @@ void c_menu::load_presets(void){
 	banks[i_comp].status=			1;
 
 	//Encoder 0
-	banks[i_comp].enc[0].name=		"Threshold";
+	banks[i_comp].enc[0].name=		"Thresh.";
 	banks[i_comp].enc[0].status=	1;
 	banks[i_comp].enc[0].value=		-10;
 	banks[i_comp].enc[0].min=		-40;
