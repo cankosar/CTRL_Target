@@ -8,16 +8,12 @@
 #ifndef INC_COM_CTRL_HPP_
 #define INC_COM_CTRL_HPP_
 
-union ctrltypes{
-	float f32;
-	uint32_t u32;
-	uint16_t u16[2];
-	uint8_t u8[4];
-};
+#include "../../../common/common.hpp"
 
-
-#define l_ctrl 2
 #define SPI_TIMEOUT 10
+
+//Waiting time in ms
+#define t_com_wait 200
 
 class c_com_ctrl{
 
@@ -25,11 +21,14 @@ class c_com_ctrl{
 		void init(void);
 		void send_update(uint8_t bank_id, bool type, uint8_t ctrl_id, union ctrltypes w);
 		void request_update(void);
+		float request_tuner_value(void);
 
 		//PA
 		void set_PA_status(bool flag);
 
 	private:
+
+		bool LOCK=1;
 		void setup_DSP_com(void);
 
 		void MX_SPI5_Init(void);

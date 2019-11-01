@@ -34,18 +34,33 @@ void c_com_ctrl::init(void){
 
 void c_com_ctrl::setup_DSP_com(void){
 
+	//Lock process
+	LOCK=1;
+
+	//Set the ready flags of uC
+	ctrl_tx[n_cmd].u8[i_bank]=i_com_bank;
+	ctrl_tx[n_cmd].u8[i_type]=0;
+	ctrl_tx[n_cmd].u8[i_id]=0;
+	ctrl_tx[n_cmd].u8[i_reserved]=0;
+
+	ctrl_tx[n_val].u32=uC_ready;
+
 	//Set up the DSP communication
 
-//	while(1){
-//		request_update();
-//		if(condition is fit){
-//			printf("Communication to DSP is up!\n");
-//			break;
-//		}else{
-//			HAL_Delay(100);
-//		}
-//	}
+	while(1){
+		request_update();
 
+		if(ctrl_rx[n_cmd].u8[i_bank]==i_com_bank && ctrl_rx[n_val].u32 == DSP_ready){
+			printf("Communication to DSP is up!\n");
+			break;
+		}else{
+			HAL_Delay(t_com_wait);
+			printf("Waiting for DSP!\n");
+//			printf("Bank:%d val:%ld",ctrl_rx[n_cmd].u8[i_bank],ctrl_rx[n_val].u32);
+		}
+	}
+
+	LOCK=0;
 }
 
 
@@ -84,16 +99,16 @@ void c_com_ctrl::MX_SPI5_Init(void)
 void c_com_ctrl::send_update(uint8_t bank_id, bool type, uint8_t ctrl_id, union ctrltypes w){
 
 //	printf("Sending update\n");
-	ctrl_tx[0].u8[0]=bank_id;
-	ctrl_tx[0].u8[1]=type;
-	ctrl_tx[0].u8[2]=ctrl_id;
-	ctrl_tx[0].u8[3]=0;
+	ctrl_tx[n_cmd].u8[i_bank]=bank_id;
+	ctrl_tx[n_cmd].u8[i_type]=type;
+	ctrl_tx[n_cmd].u8[i_id]=ctrl_id;
+	ctrl_tx[n_cmd].u8[i_reserved]=0;
 
 	if(type==1){
-		ctrl_tx[1].u32=w.u32;
+		ctrl_tx[n_val].u32=w.u32;
 //		printf("Button incoming:%lu float=%lu\n",ctrl_tx[1].u32, w1.u32);
 	}else{
-		ctrl_tx[1].f32=w.f32;
+		ctrl_tx[n_val].f32=w.f32;
 	}
 
 //	printf("Hash set %d\n",ctrl_tx[0].u32);
@@ -106,10 +121,22 @@ void c_com_ctrl::send_update(uint8_t bank_id, bool type, uint8_t ctrl_id, union 
 
 void c_com_ctrl::request_update(void){
 
-	HAL_SPI_Receive(&hspi5, (uint8_t*) ctrl_rx, l_ctrl*4, SPI_TIMEOUT);
+	HAL_SPI_TransmitReceive(&hspi5, (uint8_t*) ctrl_tx, (uint8_t*) ctrl_rx, l_ctrl*4, SPI_TIMEOUT);
 
 }
 
+float c_com_ctrl::request_tuner_value(void){
+
+
+	if(!LOCK){
+		//Request Update
+		request_update();
+	}
+
+	//Tuner mode is on and will be updated periodically
+	return ctrl_rx[n_val].f32;
+
+}
 
 #ifdef __cplusplus
 }

@@ -13,10 +13,10 @@ extern "C" {
 #include "math.h"
 #include "../inc/tuner.hpp"
 #include "../../GUI/inc/GUI.hpp"
-
+#include "../../com/inc/com_ctrl.hpp"
 
 extern c_GUI GUI;
-
+extern c_com_ctrl com;
 
 void c_tuner::init(void){
 
@@ -29,12 +29,8 @@ void c_tuner::init(void){
 void c_tuner::update(void){
 
 	//Request the current note frequency from DSP
-//	HAL_SPI_TransmitReceive(&hspi5, (uint8_t*) ctrlreg_tx, (uint8_t*) ctrlreg_rx, ctrl_len*4,10);
+	freq=com.request_tuner_value();
 
-
-//	freq=ctrlreg_rx[reg_f_tuner].f32;
-
-//	printf("Freq:%.2f\n",freq);
 	//Calculate notes and update the global register
 	calculate_note(freq);
 

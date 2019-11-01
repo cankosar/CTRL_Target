@@ -12,8 +12,8 @@
 #include "../inc/bank.hpp"
 #include "../inc/tuner.hpp"
 #include "../../com/inc/com_ctrl.hpp"
+#include "../../../common/common.hpp"
 
-#define n_bank 16
 
 #define i_general 	0
 #define i_tuner 	1

@@ -57,6 +57,7 @@ void c_menu::init_DSP_settings(void){
 
 	for(i=0;i<n_bank;i++){
 		for(j=0;j<n_enc_menu;j++){
+//			printf("Send bank %d enc:%d\n",i,j);
 			send_word.f32=banks[i].enc[j].value;
 			com.send_update(i,0,j,send_word);
 		}
@@ -135,14 +136,14 @@ void c_menu::toggle_dsp(void){
 	}
 
 	//Update active bits
-	send_word.u32=update_active_bits(i_general,dsp_state);
+	send_word.u32=update_active_bits(bankid_general,dsp_state);
 
 	//Update the GUI if active bank is general bank
 	if(act_bank==i_general){
 		GUI.update_but_value(bid_active,banks[i_general].but[bid_active].status,dsp_state);
 	}
 	//Transmit the change to the DSP-uC
-	com.send_update(i_general,1,bid_active,send_word);
+	com.send_update(bankid_general,1,bid_active,send_word);
 
 	//Update LED
 	GUI.LED.dsp(dsp_state);
@@ -172,6 +173,13 @@ void c_menu::toggle_mute(void){
 		GUI.clean_center_area();
 		update_ui_context(0);
 	}
+
+	//Update active bits
+	send_word.u32=update_active_bits(bankid_tuner,mute_state);
+
+	//Transmit the change to the DSP-uC
+	com.send_update(bankid_general,1,bid_active,send_word);
+
 }
 
 void c_menu::init_ui_context(void){
