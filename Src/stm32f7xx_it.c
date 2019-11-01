@@ -31,13 +31,12 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-
 #include "stm32f7xx_hal.h"
 #include "stm32f7xx.h"
 #include "stm32f7xx_it.h"
-#include "events.h"
-#include "GUI_control.h"
-//#include "tuner.h"
+
+#include "../GUI/inc/evm_common.hpp"
+
 
 /* USER CODE END 0 */
 
@@ -77,20 +76,20 @@ void SysTick_Handler(void)
 void SPI5_IRQHandler(void)
 {
 
-	printf("SPI IRQ\n");
+//	printf("SPI IRQ\n");
   HAL_SPI_IRQHandler(&hspi5);
 
 }
 
 void TIM2_IRQHandler(void)
 {
-	capture_events();
+	evm_main();
 	HAL_TIM_IRQHandler(&htim2);
 }
 
 void TIM3_IRQHandler(void)
 {
-	tuner_handler();
+	evm_tuner();
 	HAL_TIM_IRQHandler(&htim3);
 }
 
@@ -110,5 +109,6 @@ void DMA2_Stream4_IRQHandler(void)
 //	printf("DMA SPI5 TX\n");
   HAL_DMA_IRQHandler(&hdma_spi5_tx);
 }
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

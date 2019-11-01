@@ -114,7 +114,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     hdma_spi5_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_spi5_tx) != HAL_OK)
     {
-      _Error_Handler(__FILE__, __LINE__);
+//      _Error_Handler(__FILE__, __LINE__);
     }
 
     __HAL_LINKDMA(hspi,hdmatx,hdma_spi5_tx);
@@ -132,7 +132,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     hdma_spi5_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_spi5_rx) != HAL_OK)
     {
-      _Error_Handler(__FILE__, __LINE__);
+//      _Error_Handler(__FILE__, __LINE__);
     }
 
     __HAL_LINKDMA(hspi,hdmarx,hdma_spi5_rx);
