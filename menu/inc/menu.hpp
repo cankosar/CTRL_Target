@@ -31,6 +31,7 @@
 #define i_rotary	13
 #define i_flanger	14
 #define i_autowah	15
+#define i_wahwah	16
 
 //General button ids
 #define bid_active 0
@@ -68,10 +69,12 @@ class c_menu{
 		void update_ui_context(int8_t val);
 		void toggle_dsp(void);
 		void toggle_mute(void);
+		void exp_pedal_update(uint16_t val);
 
 		//States
 		bool mute_state;
 		bool dsp_state;
+		bool exp_state;
 
 		//Flag indicating the state of capture
 		bool capture_state=0;

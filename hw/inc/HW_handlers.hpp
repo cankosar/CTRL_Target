@@ -9,15 +9,20 @@
 #define HW_HANDLERS_HPP_
 
 
-DMA_HandleTypeDef hdma_spi5_tx;
-DMA_HandleTypeDef hdma_spi5_rx;
+
+//Timer handlers
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
-//UART_HandleTypeDef huart3;
-//PCD_HandleTypeDef hpcd_USB_OTG_FS;
+
+//SPI handlers
 SPI_HandleTypeDef hspi3;
 SPI_HandleTypeDef hspi5;
+DMA_HandleTypeDef hdma_spi5_tx;
+DMA_HandleTypeDef hdma_spi5_rx;
 
+//ADC handlers
+ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 
 //GPIO sockets of encoders
 GPIO_TypeDef* enc_GPIO_Port[4][2];

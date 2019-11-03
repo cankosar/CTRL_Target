@@ -17,10 +17,14 @@ extern "C" {
 extern c_GUI GUI;
 extern c_com_ctrl com;
 
+
 void c_menu::init(void){
 
 	//Capture inactive
 	capture_state=0;
+
+	//Expression pedal inactive
+	exp_state=0;
 
 	//Reset active bits
 	active_bits=0;
@@ -91,7 +95,6 @@ void c_menu::update_button(uint8_t bid){
 	bool new_val=banks[act_bank].but[bid].toggle_value();
 
 	//Update active bits
-
 	send_word.u32=update_active_bits(act_bank,new_val);
 
 	//Update the GUI
@@ -99,6 +102,11 @@ void c_menu::update_button(uint8_t bid){
 
 	//Transmit the change to the DSP-uC
 	com.send_update(act_bank,1,bid,send_word);
+
+	//Update the expression state
+	if(act_bank==bankid_wahwah){
+		exp_state=banks[bankid_wahwah].but[0].value;
+	}
 
 
 }
@@ -284,6 +292,17 @@ void c_menu::load_backup(void){
 	}
 
 }
+
+void c_menu::exp_pedal_update(uint16_t val){
+
+	//Send hash
+	send_word.u16[0]=val;
+
+	//Transmit the change to the DSP-uC
+	com.send_update(bankid_wahwah,type_enc,i_exp_value,send_word);
+
+}
+
 
 #ifdef __cplusplus
 }

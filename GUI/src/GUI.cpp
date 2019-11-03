@@ -24,7 +24,6 @@ extern "C" {
 
 c_com_ctrl com;
 c_ili9341 disp;
-
 c_evm evm;
 
 void c_GUI::init(void){
@@ -257,7 +256,9 @@ void evm_main(void){
 }
 
 void evm_tuner(void){
+
 	evm.update_tuner();
+	evm.update_exppedal();
 }
 
 #ifdef __cplusplus

@@ -53,6 +53,8 @@
 #define USER_Btn_GPIO_Port GPIOC
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOH
+#define EXP_IN_Pin GPIO_PIN_3
+#define EXP_IN_GPIO_Port GPIOA
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8

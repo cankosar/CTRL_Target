@@ -13,6 +13,8 @@ extern "C" {
 #include "../inc/evm_common.hpp"
 
 #include "../../menu/inc/menu.hpp"
+#include "../../hw/inc/exppedal.hpp"
+
 //#include "../../hw/inc/HW_handlers.hpp"
 
 //GPIO sockets of encoders
@@ -23,6 +25,7 @@ extern uint16_t enc_GPIO_Pin[n_enc][2];
 extern GPIO_TypeDef* but_GPIO_Port[n_but];
 extern uint16_t but_GPIO_Pin[n_but];
 
+c_exppedal exppedal;
 c_menu menu;
 
 void c_evm::init(void){
@@ -90,6 +93,10 @@ void c_evm::init(void){
 		but_GPIO_Pin[5]=BUT5_PIN;
 
 		P_LOCK=0;
+
+		//Initialize anb start the expression pedal
+		exppedal.init();
+		exppedal.start();
 }
 
 void c_evm::capture(void){
@@ -145,6 +152,11 @@ void c_evm::update_tuner(void){
 	f_tnr_update=1;
 }
 
+void c_evm::update_exppedal(void){
+
+	//Raise update flag
+	f_exp_update=1;
+}
 
 void c_evm::process(void){
 
@@ -217,6 +229,15 @@ void c_evm::process(void){
 			menu.tuner.update();						//Update tuner
 			f_tnr_update=0;								//Raise down the tuner update request
 			tuner_update_lock=0;						//Unlock tuner update
+		}
+	}
+
+	//Expression pedal processing
+	if(menu.exp_state){
+		if(f_exp_update){
+			exppedal.get_value();
+			menu.exp_pedal_update(exppedal.get_value());
+			f_exp_update=0;
 		}
 	}
 }

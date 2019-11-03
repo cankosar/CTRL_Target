@@ -836,6 +836,60 @@ void c_menu::load_presets(void){
 	banks[i_autowah].but[3].name=		"";
 	banks[i_autowah].but[3].status=		0;
 	banks[i_autowah].but[3].value=		0;
+
+	/*
+			Bank 16: WahWah
+	*/
+	banks[i_wahwah].name=				"Wah-Wah";
+	banks[i_wahwah].id=					bankid_wahwah;
+	banks[i_wahwah].status=				1;
+
+	//Encoder 0
+	banks[i_wahwah].enc[0].name=		"Depth";
+	banks[i_wahwah].enc[0].status=		1;
+	banks[i_wahwah].enc[0].value=		50;
+	banks[i_wahwah].enc[0].min=			0;
+	banks[i_wahwah].enc[0].max=			100;
+	banks[i_wahwah].enc[0].step=		1;
+	banks[i_wahwah].enc[0].format=		"%.0f";
+
+	//Encoder 1
+	banks[i_wahwah].enc[1].name=		"Quality";
+	banks[i_wahwah].enc[1].status=		1;
+	banks[i_wahwah].enc[1].value=		1;
+	banks[i_wahwah].enc[1].min=			0.3;
+	banks[i_wahwah].enc[1].max=			5;
+	banks[i_wahwah].enc[1].step=		0.1;
+	banks[i_wahwah].enc[1].format=		"%.1f";
+
+	//Encoder 2
+	banks[i_wahwah].enc[2].name=		"";
+	banks[i_wahwah].enc[2].status=		0;
+	banks[i_wahwah].enc[2].value=		1;
+	banks[i_wahwah].enc[2].min=			0.3;
+	banks[i_wahwah].enc[2].max=			5;
+	banks[i_wahwah].enc[2].step=		0.1;
+	banks[i_wahwah].enc[2].format=		"%.1f";
+
+	//Button 0
+	banks[i_wahwah].but[0].name=		"Active";
+	banks[i_wahwah].but[0].status=		1;
+	banks[i_wahwah].but[0].value=		0;
+
+	//Button 1
+	banks[i_wahwah].but[1].name=		"";
+	banks[i_wahwah].but[1].status=		0;
+	banks[i_wahwah].but[1].value=		0;
+
+	//Button 2
+	banks[i_wahwah].but[2].name=		"";
+	banks[i_wahwah].but[2].status=		0;
+	banks[i_wahwah].but[2].value=		0;
+
+	//Button 3
+	banks[i_wahwah].but[3].name=		"";
+	banks[i_wahwah].but[3].status=		0;
+	banks[i_wahwah].but[3].value=		0;
 }
 
 
