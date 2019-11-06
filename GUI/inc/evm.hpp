@@ -52,8 +52,18 @@ class c_evm{
 		bool f_exp_update;
 		bool tuner_update_lock;
 
+		//Expression
+		uint16_t last_exp_value;
+
 		int16_t enc[n_enc];
 		uint8_t but[n_but];
+
+		//Foot switch current and latest values
+		bool c_fs0, d_fs0;
+		bool c_fs1, d_fs1;
+
+		uint32_t tic_fs0, tic_fs1;
+		uint8_t t_debounce_fs=100;
 };
 
 

@@ -70,6 +70,8 @@ class c_menu{
 		void toggle_dsp(void);
 		void toggle_mute(void);
 		void exp_pedal_update(uint16_t val);
+		void update_fs0(bool val);
+		void update_fs1(bool val);
 
 		//States
 		bool mute_state;

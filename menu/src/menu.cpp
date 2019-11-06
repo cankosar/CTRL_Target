@@ -107,9 +107,8 @@ void c_menu::update_button(uint8_t bid){
 	if(act_bank==bankid_wahwah){
 		exp_state=banks[bankid_wahwah].but[0].value;
 	}
-
-
 }
+
 
 uint32_t c_menu::update_active_bits(uint8_t bank_id, bool val){
 
@@ -301,8 +300,45 @@ void c_menu::exp_pedal_update(uint16_t val){
 	//Transmit the change to the DSP-uC
 	com.send_update(bankid_wahwah,type_enc,i_exp_value,send_word);
 
+	printf("%d\n",val);
+
 }
 
+void c_menu::update_fs0(bool val){
+
+	//Update the value
+	banks[fs0_bank].but[0].value=val;
+
+	//Update active bits
+	send_word.u32=update_active_bits(fs0_bank,val);
+
+	//Update the GUI
+	if(fs0_bank==act_bank){
+		GUI.update_but_value(0,banks[fs0_bank].but[0].status,val);
+	}
+
+	//Transmit the change to the DSP-uC
+	com.send_update(fs0_bank,1,0,send_word);
+
+}
+
+void c_menu::update_fs1(bool val){
+
+	//Update the value
+	banks[fs1_bank].but[0].value=val;
+
+	//Update active bits
+	send_word.u32=update_active_bits(fs1_bank,val);
+
+	//Update the GUI
+	if(fs1_bank==act_bank){
+		GUI.update_but_value(0,banks[fs1_bank].but[0].status,val);
+	}
+
+	//Transmit the change to the DSP-uC
+	com.send_update(fs1_bank,1,0,send_word);
+
+}
 
 #ifdef __cplusplus
 }

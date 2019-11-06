@@ -66,12 +66,18 @@
 #define BUT5_PORT GPIOE
 #define BUT5_PIN GPIO_PIN_0
 
-
+//Encoder
 #define n_enc 4
 #define n_but 6
 
 #define n_enc_menu 3
 #define n_but_menu 4
+
+//Foot switch
+#define FS_PORT 	GPIOD
+#define FS0_PIN 	GPIO_PIN_6
+#define FS1_PIN 	GPIO_PIN_7
+
 
 //Positions of the buttons
 #define DX_ENC0 53

@@ -43,6 +43,7 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
 extern DMA_HandleTypeDef hdma_spi5_tx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
 extern SPI_HandleTypeDef hspi5;
@@ -103,6 +104,12 @@ void TIM3_IRQHandler(void)
 {
 	evm_tuner();
 	HAL_TIM_IRQHandler(&htim3);
+}
+
+void TIM4_IRQHandler(void)
+{
+	evm_expression();
+	HAL_TIM_IRQHandler(&htim4);
 }
 
 

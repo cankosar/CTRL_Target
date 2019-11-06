@@ -73,6 +73,11 @@ void c_evm::init(void){
 			enc_greycode[i]|=(HAL_GPIO_ReadPin(enc_GPIO_Port[i][0],enc_GPIO_Pin[i][0])<<2);
 		}
 
+		//Init footswitch values
+		d_fs0=c_fs0=HAL_GPIO_ReadPin(FS_PORT,FS0_PIN);
+		d_fs1=c_fs1=HAL_GPIO_ReadPin(FS_PORT,FS1_PIN);
+
+
 		//Port&Pins for button 0
 		but_GPIO_Port[0]=BUT0_PORT;
 		but_GPIO_Pin[0]=BUT0_PIN;
@@ -216,6 +221,27 @@ void c_evm::process(void){
 			}
 		}
 
+		//Foot switches
+		if(( HAL_GetTick()-tic_fs0 )> t_debounce_fs){
+			c_fs0=HAL_GPIO_ReadPin(FS_PORT,FS0_PIN);
+			tic_fs0=HAL_GetTick();
+		}
+
+		if(( HAL_GetTick()-tic_fs1 )> t_debounce_fs){
+			c_fs1=HAL_GPIO_ReadPin(FS_PORT,FS1_PIN);
+			tic_fs1=HAL_GetTick();
+		}
+
+		//Foot switch 0
+		if(c_fs0!=d_fs0){
+			menu.update_fs0(c_fs0);
+			d_fs0=c_fs0;
+		}
+
+		if(c_fs1!=d_fs1){
+			menu.update_fs1(c_fs1);
+			d_fs1=c_fs1;
+		}
 
 
 		P_LOCK=0;									//Unset process lock
@@ -235,8 +261,8 @@ void c_evm::process(void){
 	//Expression pedal processing
 	if(menu.exp_state){
 		if(f_exp_update){
-			exppedal.get_value();
-			menu.exp_pedal_update(exppedal.get_value());
+			last_exp_value=exppedal.get_value();
+			menu.exp_pedal_update(last_exp_value);
 			f_exp_update=0;
 		}
 	}

@@ -258,6 +258,10 @@ void evm_main(void){
 void evm_tuner(void){
 
 	evm.update_tuner();
+}
+
+void evm_expression(void){
+
 	evm.update_exppedal();
 }
 

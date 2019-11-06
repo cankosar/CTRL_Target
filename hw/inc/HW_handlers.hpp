@@ -13,6 +13,7 @@
 //Timer handlers
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 
 //SPI handlers
 SPI_HandleTypeDef hspi3;

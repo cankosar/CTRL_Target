@@ -15,6 +15,7 @@ class c_sysconfig{
 		void MX_GPIO_Init(void);
 		void MX_TIM2_Init(void);
 		void MX_TIM3_Init(void);
+		void MX_TIM4_Init(void);
 		void MX_ADC1_Init(void);
 		void enable_backup_sram(void);
 };

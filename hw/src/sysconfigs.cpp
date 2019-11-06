@@ -17,6 +17,7 @@ extern "C" {
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
 
 void c_sysconfig::init(void){
 
@@ -27,12 +28,15 @@ void c_sysconfig::init(void){
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_TIM4_Init();
+
   MX_ADC1_Init();
 
 
   /* Initialize timers */
   HAL_TIM_Base_Start_IT(&htim2);
   HAL_TIM_Base_Start_IT(&htim3);
+  HAL_TIM_Base_Start_IT(&htim4);
 
   //Enable backup SRAM
   enable_backup_sram();
@@ -142,6 +146,41 @@ void c_sysconfig::MX_ADC1_Init(void)
 
   }
 
+
+void c_sysconfig::MX_TIM4_Init(void)
+{
+
+    TIM_ClockConfigTypeDef sClockSourceConfig;
+    TIM_MasterConfigTypeDef sMasterConfig;
+
+    htim4.Instance = TIM4;
+    htim4.Init.Prescaler = 10000;
+    htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim4.Init.Period = 1000;
+    htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+
+    if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+    {
+//      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+    {
+//      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+    {
+//      _Error_Handler(__FILE__, __LINE__);
+    }
+
+}
+
   void c_sysconfig::MX_GPIO_Init(void)
   {
 
@@ -214,7 +253,7 @@ void c_sysconfig::MX_ADC1_Init(void)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 
-    for(int i=0;i<4;i++){
+    for(int i=0;i<n_enc;i++){
   	  for(int j=0;j<2;j++){
   		  /*Configure GPIO pins : Encoder*/
   		  GPIO_InitStruct.Pin = enc_GPIO_Pin[i][j];
@@ -225,7 +264,7 @@ void c_sysconfig::MX_ADC1_Init(void)
   	  }
     }
 
-    for(int i=0;i<6;i++){
+    for(int i=0;i<n_but;i++){
   	  /*Configure GPIO pins : Button*/
   	  GPIO_InitStruct.Pin = but_GPIO_Pin[i];
   	  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -233,6 +272,13 @@ void c_sysconfig::MX_ADC1_Init(void)
   	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   	  HAL_GPIO_Init(but_GPIO_Port[i], &GPIO_InitStruct);
     }
+
+    //Foot switch pins
+    GPIO_InitStruct.Pin = FS0_PIN|FS1_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(FS_PORT, &GPIO_InitStruct);
 
 
     /*Configure GPIO pin : USB_OverCurrent_Pin */
