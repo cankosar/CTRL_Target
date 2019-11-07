@@ -854,17 +854,17 @@ void c_menu::load_presets(void){
 	banks[i_wahwah].enc[0].format=		"%.0f";
 
 	//Encoder 1
-	banks[i_wahwah].enc[1].name=		"Quality";
+	banks[i_wahwah].enc[1].name=		"Width";
 	banks[i_wahwah].enc[1].status=		1;
-	banks[i_wahwah].enc[1].value=		1;
-	banks[i_wahwah].enc[1].min=			0.3;
-	banks[i_wahwah].enc[1].max=			5;
-	banks[i_wahwah].enc[1].step=		0.1;
-	banks[i_wahwah].enc[1].format=		"%.1f";
+	banks[i_wahwah].enc[1].value=		100;
+	banks[i_wahwah].enc[1].min=			30;
+	banks[i_wahwah].enc[1].max=			100;
+	banks[i_wahwah].enc[1].step=		5;
+	banks[i_wahwah].enc[1].format=		"%.0f";
 
 	//Encoder 2
-	banks[i_wahwah].enc[2].name=		"";
-	banks[i_wahwah].enc[2].status=		0;
+	banks[i_wahwah].enc[2].name=		"Quality";
+	banks[i_wahwah].enc[2].status=		1;
 	banks[i_wahwah].enc[2].value=		1;
 	banks[i_wahwah].enc[2].min=			0.3;
 	banks[i_wahwah].enc[2].max=			5;

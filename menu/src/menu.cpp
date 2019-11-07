@@ -300,7 +300,7 @@ void c_menu::exp_pedal_update(uint16_t val){
 	//Transmit the change to the DSP-uC
 	com.send_update(bankid_wahwah,type_enc,i_exp_value,send_word);
 
-	printf("%d\n",val);
+//	printf("%d\n",val);
 
 }
 

@@ -25,7 +25,7 @@ void c_com_ctrl::init(void){
 	MX_SPI5_Init();
 
 	//Set up the communication to DSP
-//	setup_DSP_com();
+	setup_DSP_com();
 
 	//Set PA status
 	set_PA_status(1);
