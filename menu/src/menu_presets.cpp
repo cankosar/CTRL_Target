@@ -107,13 +107,13 @@ void c_menu::load_presets(void){
 	banks[i_lowshelf].enc[1].format=	"%.0f";
 
 	//Encoder 2
-	banks[i_lowshelf].enc[2].name=		"";
-	banks[i_lowshelf].enc[2].status=	0;
-	banks[i_lowshelf].enc[2].value=		50;
-	banks[i_lowshelf].enc[2].min=		0;
-	banks[i_lowshelf].enc[2].max=		100;
-	banks[i_lowshelf].enc[2].step=		1;
-	banks[i_lowshelf].enc[2].format=	"%.0f";
+	banks[i_lowshelf].enc[2].name=		"Quality";
+	banks[i_lowshelf].enc[2].status=	1;
+	banks[i_lowshelf].enc[2].value=		1;
+	banks[i_lowshelf].enc[2].min=		0.3;
+	banks[i_lowshelf].enc[2].max=		5;
+	banks[i_lowshelf].enc[2].step=		0.1;
+	banks[i_lowshelf].enc[2].format=	"%.1f";
 
 	//Button 0
 	banks[i_lowshelf].but[0].name=		"Active";
@@ -323,13 +323,13 @@ void c_menu::load_presets(void){
 	banks[i_highshelf].enc[1].format=	"%.0f";
 
 	//Encoder 2
-	banks[i_highshelf].enc[2].name=		"";
-	banks[i_highshelf].enc[2].status=	0;
-	banks[i_highshelf].enc[2].value=	50;
-	banks[i_highshelf].enc[2].min=		0;
-	banks[i_highshelf].enc[2].max=		100;
-	banks[i_highshelf].enc[2].step=		1;
-	banks[i_highshelf].enc[2].format=	"%.0f";
+	banks[i_highshelf].enc[2].name=		"Quality";
+	banks[i_highshelf].enc[2].status=	1;
+	banks[i_highshelf].enc[2].value=	1;
+	banks[i_highshelf].enc[2].min=		0.3;
+	banks[i_highshelf].enc[2].max=		5;
+	banks[i_highshelf].enc[2].step=		0.1;
+	banks[i_highshelf].enc[2].format=	"%.1f";
 
 	//Button 0
 	banks[i_highshelf].but[0].name=		"Active";
@@ -391,9 +391,10 @@ void c_menu::load_presets(void){
 	banks[i_delay].but[0].value=	0;
 
 	//Button 1
-	banks[i_delay].but[1].name=		"";
-	banks[i_delay].but[1].status=	0;
+	banks[i_delay].but[1].name=		"Tap";
+	banks[i_delay].but[1].status=	1;
 	banks[i_delay].but[1].value=	0;
+	banks[i_delay].but[1].type=		1;
 
 	//Button 2
 	banks[i_delay].but[2].name=		"";

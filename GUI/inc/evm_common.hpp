@@ -14,6 +14,7 @@ extern "C" {
 
 void evm_main(void);
 void evm_tuner(void);
+void evm_backup_trigger(void);
 void evm_expression(void);
 
 #ifdef __cplusplus

@@ -20,7 +20,7 @@ class c_GUI{
 		void draw_template_lines(void);
 		void update_enc_desc(uint8_t id, bool status, const char* desc);
 		void update_enc_value(uint8_t id, bool status, float* val, const char* format);
-		void update_but_value(uint8_t id, bool status, bool flag);
+		void update_but_value(uint8_t id, bool type, bool status, bool flag);
 		void update_but_desc(uint8_t id, bool status, const char* desc);
 		void update_title(const char* desc);
 		void clean_center_area(void);
@@ -35,7 +35,6 @@ class c_GUI{
 	private:
 		//Methods
 		uint16_t calc_RGB565(uint8_t r,uint8_t g,uint8_t b);
-
 
 		//Design parameter
 		int16_t dx_enc[n_enc]={DX_ENC0,DX_ENC1,DX_ENC2};

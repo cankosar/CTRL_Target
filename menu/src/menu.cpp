@@ -61,9 +61,9 @@ void c_menu::init_DSP_settings(void){
 
 	for(i=0;i<n_bank;i++){
 		for(j=0;j<n_enc_menu;j++){
-//			printf("Send bank %d enc:%d\n",i,j);
 			send_word.f32=banks[i].enc[j].value;
 			com.send_update(i,0,j,send_word);
+			HAL_Delay(10);	//This is important because the DSP target is interrupt driven and the data can be lost
 		}
 	}
 
@@ -91,21 +91,29 @@ void c_menu::update_encoder(uint8_t eid, int8_t val){
 
 void c_menu::update_button(uint8_t bid){
 
-	//Update the value
-	bool new_val=banks[act_bank].but[bid].toggle_value();
+	if(bid==i_activate_button){
+			//Update the value
+		bool new_val=banks[act_bank].but[bid].toggle_value();
 
-	//Update active bits
-	send_word.u32=update_active_bits(act_bank,new_val);
+		//Update active bits
+		send_word.u32=update_active_bits(act_bank,new_val);
 
-	//Update the GUI
-	GUI.update_but_value(bid,banks[act_bank].but[bid].status,new_val);
+		//Update the GUI
+		GUI.update_but_value(bid,banks[act_bank].but[bid].type, banks[act_bank].but[bid].status,new_val);
 
-	//Transmit the change to the DSP-uC
-	com.send_update(act_bank,1,bid,send_word);
+		//Transmit the change to the DSP-uC
+		com.send_update(act_bank,1,bid,send_word);
 
-	//Update the expression state
-	if(act_bank==bankid_wahwah){
-		exp_state=banks[bankid_wahwah].but[0].value;
+		//Update the expression state
+		if(act_bank==bankid_wahwah){
+			exp_state=banks[bankid_wahwah].but[0].value;
+		}
+	}else if(bid==i_tap_button){
+		if(act_bank==bankid_delay){
+			process_tap();
+			GUI.update_but_value(i_tap_button,banks[bankid_delay].but[i_tap_button].type,banks[bankid_delay].but[i_tap_button].status,0);
+
+		}
 	}
 }
 
@@ -137,17 +145,12 @@ void c_menu::toggle_dsp(void){
 	//Toggle the value
 	bool dsp_state=banks[i_general].but[bid_active].toggle_value();
 
-	//Save backups
-	if(!dsp_state){
-		save_backup();
-	}
-
 	//Update active bits
 	send_word.u32=update_active_bits(bankid_general,dsp_state);
 
 	//Update the GUI if active bank is general bank
 	if(act_bank==i_general){
-		GUI.update_but_value(bid_active,banks[i_general].but[bid_active].status,dsp_state);
+		GUI.update_but_value(bid_active,banks[i_general].but[bid_active].type,banks[i_general].but[bid_active].status,dsp_state);
 	}
 	//Transmit the change to the DSP-uC
 	com.send_update(bankid_general,1,bid_active,send_word);
@@ -163,11 +166,6 @@ void c_menu::toggle_mute(void){
 
 	//Toggle tuner
 	mute_state=banks[i_tuner].but[bid_active].toggle_value();
-
-	//Save backups
-	if(mute_state){
-		save_backup();
-	}
 
 	//Mute/Release power amp
 	com.set_PA_status(!mute_state);
@@ -234,7 +232,7 @@ void c_menu::update_ui_context(int8_t val){
 		GUI.update_but_desc(i,banks[act_bank].but[i].status,banks[act_bank].but[i].name);
 
 		//Update button values
-		GUI.update_but_value(i,banks[act_bank].but[i].status, banks[act_bank].but[i].value);
+		GUI.update_but_value(i,banks[act_bank].but[i].type, banks[act_bank].but[i].status, banks[act_bank].but[i].value);
 	}
 }
 
@@ -314,7 +312,7 @@ void c_menu::update_fs0(bool val){
 
 	//Update the GUI
 	if(fs0_bank==act_bank){
-		GUI.update_but_value(0,banks[fs0_bank].but[0].status,val);
+		GUI.update_but_value(i_activate_button,banks[fs0_bank].but[i_activate_button].type,banks[fs0_bank].but[i_activate_button].status,val);
 	}
 
 	//Transmit the change to the DSP-uC
@@ -332,13 +330,92 @@ void c_menu::update_fs1(bool val){
 
 	//Update the GUI
 	if(fs1_bank==act_bank){
-		GUI.update_but_value(0,banks[fs1_bank].but[0].status,val);
+		GUI.update_but_value(i_activate_button,banks[fs1_bank].but[i_activate_button].type,banks[fs1_bank].but[i_activate_button].status,val);
 	}
 
 	//Transmit the change to the DSP-uC
 	com.send_update(fs1_bank,1,0,send_word);
 
 }
+
+void c_menu::init_tap(void){
+
+	reset_tap_maf_buffer();
+}
+
+void c_menu::process_tap(void){
+
+	uint32_t tap, dist;
+
+	//Moving average value
+	float ma;
+
+	tap=HAL_GetTick();
+	dist=tap-last_tap;
+	last_tap=tap;
+
+
+
+	//Check the plausibility
+	if(dist>(uint32_t) banks[bankid_delay].enc[1].min && dist<(uint32_t) banks[bankid_delay].enc[1].max){
+
+		//Increase the valid taps
+		if(valid_taps<l_maf_tap){
+			valid_taps++;
+		}
+
+		//Insert the value to the buffer
+		maf_tap_buf[maf_ptr]=dist;
+
+
+		//Update moving average filter pointer
+		maf_ptr++;
+		if(maf_ptr>=l_maf_tap){
+			maf_ptr=0;
+		}
+
+		//Calculate moving average
+		uint8_t i;
+		for(i=0;i<l_maf_tap; i++){
+			ma+=(float)maf_tap_buf[i];
+		}
+
+		ma=ma/valid_taps;
+
+		if(valid_taps>=4){
+			//Update the value
+			banks[bankid_delay].enc[i_tap_button].value=ma;
+
+			//Update GUI
+			GUI.update_enc_value(i_tap_button,banks[bankid_delay].enc[i_tap_button].status, &ma,banks[bankid_delay].enc[i_tap_button].format);
+
+			//Send message
+			//Send hash
+			send_word.f32=ma;
+
+			//Transmit the change to the DSP-uC
+			com.send_update(bankid_delay,type_enc,i_tap_button,send_word);
+
+		}
+
+
+	}else{
+		reset_tap_maf_buffer();
+	}
+
+}
+
+void c_menu::reset_tap_maf_buffer(void){
+
+	maf_ptr=0;
+	valid_taps=0;
+	memset(maf_tap_buf, 0, l_maf_tap*4);
+
+}
+
+
+
+
 
 #ifdef __cplusplus
 }

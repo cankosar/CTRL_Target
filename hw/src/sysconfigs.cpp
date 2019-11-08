@@ -15,6 +15,7 @@ extern "C" {
 #include "../inc/HW_config.hpp"
 #include "../inc/HW_handlers.hpp"
 
+extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
@@ -26,9 +27,18 @@ void c_sysconfig::init(void){
   SystemClock_Config();
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+
+  //Timer evm
   MX_TIM2_Init();
+
+  //Timer tuner
   MX_TIM3_Init();
+
+  //Timer Expression pedal
   MX_TIM4_Init();
+
+  //Timer Backup SRAM
+  MX_TIM5_Init();
 
   MX_ADC1_Init();
 
@@ -37,6 +47,7 @@ void c_sysconfig::init(void){
   HAL_TIM_Base_Start_IT(&htim2);
   HAL_TIM_Base_Start_IT(&htim3);
   HAL_TIM_Base_Start_IT(&htim4);
+  HAL_TIM_Base_Start_IT(&htim5);
 
   //Enable backup SRAM
   enable_backup_sram();
@@ -77,6 +88,44 @@ void c_sysconfig::MX_ADC1_Init(void)
   }
 
 }
+
+void c_sysconfig::MX_TIM5_Init(void)
+  {
+
+	 printf("Initing timer MSP\n");
+    TIM_ClockConfigTypeDef sClockSourceConfig;
+    TIM_MasterConfigTypeDef sMasterConfig;
+
+    htim5.Instance = TIM5;
+    htim5.Init.Prescaler = 40000;
+    htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim5.Init.Period = 10000;
+    htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;
+    htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+
+    if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
+    {
+    	printf("Error initing timer 5\n");
+//      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    if (HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig) != HAL_OK)
+    {
+    	printf("Error initing timer 5\n");
+//      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+    {
+    	printf("Error initing timer 1\n");
+//      _Error_Handler(__FILE__, __LINE__);
+    }
+
+  }
 
   void c_sysconfig::MX_TIM2_Init(void)
   {
@@ -156,7 +205,7 @@ void c_sysconfig::MX_TIM4_Init(void)
     htim4.Instance = TIM4;
     htim4.Init.Prescaler = 10000;
     htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim4.Init.Period = 1000;
+    htim4.Init.Period = 100;
     htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 

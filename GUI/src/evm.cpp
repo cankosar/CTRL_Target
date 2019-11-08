@@ -157,6 +157,13 @@ void c_evm::update_tuner(void){
 	f_tnr_update=1;
 }
 
+void c_evm::update_backup_memory(void){
+
+	//Raise update flag
+	f_bkpsram_update=1;
+}
+
+
 void c_evm::update_exppedal(void){
 
 	//Raise update flag
@@ -242,6 +249,13 @@ void c_evm::process(void){
 			menu.update_fs1(c_fs1);
 			d_fs1=c_fs1;
 		}
+
+		//Backup SRAM
+		if(f_bkpsram_update){
+			menu.save_backup();
+			f_bkpsram_update=0;
+		}
+
 
 
 		P_LOCK=0;									//Unset process lock

@@ -72,6 +72,7 @@ class c_menu{
 		void exp_pedal_update(uint16_t val);
 		void update_fs0(bool val);
 		void update_fs1(bool val);
+		void save_backup(void);
 
 		//States
 		bool mute_state;
@@ -87,10 +88,24 @@ class c_menu{
 	private:
 
 		//Presets
-		void save_backup(void);
+
 		void load_backup(void);
 		void load_active_banks(uint32_t active_bits);
 		void init_DSP_settings(void);
+
+		//Tapping
+		void init_tap(void);
+		void process_tap(void);
+		void reset_tap_maf_buffer(void);
+		uint32_t 	last_tap;
+//		uint32_t 	min_dist;
+//		uint32_t 	max_dist;
+		uint8_t 	maf_ptr;
+
+
+		static const uint8_t l_maf_tap=10;
+		uint32_t maf_tap_buf[l_maf_tap];
+		uint8_t valid_taps;
 
 		s_preset backup_preset;
 

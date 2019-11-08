@@ -129,20 +129,29 @@ void c_GUI::update_enc_value(uint8_t id, bool status, float* val, const char* fo
 	}
 }
 
-void c_GUI::update_but_value(uint8_t id, bool status, bool flag){
+void c_GUI::update_but_value(uint8_t id, bool type, bool status, bool flag){
 
 	//Set text size and color
 	disp.set_text_size(W_F_VAL);
 
 	if(status){
-		if(flag){
-			disp.set_text_color(COL_ACTIVE,COL_BG);
-			//Print text
-			disp.print_static((char*)"On",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
-		}else{
+		if(type==0){
+			//Type is standard toggle
+			if(flag){
+				disp.set_text_color(COL_ACTIVE,COL_BG);
+				//Print text
+				disp.print_static((char*)"On",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
+			}else{
+				disp.set_text_color(COL_INACTIVE,COL_BG);
+				//Print text
+				disp.print_static((char*)"Off",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
+			}
+		}else if(type==1){
+			//Type is TAP
 			disp.set_text_color(COL_INACTIVE,COL_BG);
-			//Print text
-			disp.print_static((char*)"Off",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
+			disp.print_static((char*)"REC",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
+			HAL_Delay(200);
+			disp.print_static((char*)"",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
 		}
 	}else{
 		disp.print_static((char*)"",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
@@ -253,6 +262,10 @@ uint16_t c_GUI::calc_RGB565(uint8_t r,uint8_t g,uint8_t b){
 //Interrupt process
 void evm_main(void){
 	evm.capture();
+}
+
+void evm_backup_trigger(void){
+	evm.update_backup_memory();
 }
 
 void evm_tuner(void){

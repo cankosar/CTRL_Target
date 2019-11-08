@@ -17,6 +17,7 @@ class c_evm{
 		void capture(void);
 		void update_tuner(void);
 		void update_exppedal(void);
+		void update_backup_memory(void);
 		void process(void);
 
 	private:
@@ -49,6 +50,7 @@ class c_evm{
 
 		//States
 		bool f_tnr_update;
+		bool f_bkpsram_update;
 		bool f_exp_update;
 		bool tuner_update_lock;
 

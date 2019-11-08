@@ -41,9 +41,12 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
+
 extern DMA_HandleTypeDef hdma_spi5_tx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
 extern SPI_HandleTypeDef hspi5;
@@ -92,10 +95,18 @@ void SPI5_IRQHandler(void)
 //	printf("SPI IRQ\n");
   HAL_SPI_IRQHandler(&hspi5);
 
+
+}
+
+void TIM5_IRQHandler(void){
+
+	evm_backup_trigger();
+	HAL_TIM_IRQHandler(&htim5);
 }
 
 void TIM2_IRQHandler(void)
 {
+
 	evm_main();
 	HAL_TIM_IRQHandler(&htim2);
 }

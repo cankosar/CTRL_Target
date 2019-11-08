@@ -33,6 +33,7 @@ class c_but{
 		const char* name;
 		bool status;
 		bool value;
+		bool type=0;	//0 is standard, 1 is tap
 };
 
 struct s_bank{
