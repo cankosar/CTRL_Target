@@ -31,7 +31,7 @@ void c_exppedal::start(void){
 void c_exppedal::stop(void){
 
 	//Request using interrupt mode
-	HAL_ADC_Stop_DMA(&hadc1);
+//	HAL_ADC_Stop_DMA(&hadc1);
 
 }
 

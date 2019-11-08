@@ -23,9 +23,6 @@ void c_menu::init(void){
 	//Capture inactive
 	capture_state=0;
 
-	//Expression pedal inactive
-	exp_state=0;
-
 	//Reset active bits
 	active_bits=0;
 
@@ -34,6 +31,9 @@ void c_menu::init(void){
 
 	//Load backup data
 	load_backup();
+
+	//Expression pedal state initialize
+	exp_state=banks[bankid_wahwah].but[0].value;
 
 	//Load UI
 	init_ui_context();
