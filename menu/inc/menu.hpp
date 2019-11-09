@@ -99,7 +99,7 @@ class c_menu{
 
 
 		void load_active_banks(uint32_t active_bits);
-		void init_DSP_settings(void);
+		void send_settings_DSP(void);
 
 		//Tapping
 		void init_tap(void);

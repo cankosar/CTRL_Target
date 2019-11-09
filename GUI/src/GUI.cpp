@@ -129,7 +129,7 @@ void c_GUI::update_enc_value(uint8_t id, bool status, float* val, const char* fo
 	}
 }
 
-void c_GUI::update_but_value(uint8_t id, bool type, bool status, bool flag){
+void c_GUI::update_but_value(uint8_t id, uint8_t type, bool status, bool flag){
 
 	//Set text size and color
 	disp.set_text_size(W_F_VAL);

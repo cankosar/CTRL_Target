@@ -43,7 +43,7 @@ void c_menu::init(void){
 	tuner.update_note_bins(banks[i_general].enc[eid_freqA].value);
 
 	//Transmit settings  DSP
-	init_DSP_settings();
+	send_settings_DSP();
 
 	//Capture active
 	capture_state=1;
@@ -52,9 +52,10 @@ void c_menu::init(void){
 	GUI.LED.init();
 
 
+//	printf("Addresses: BACKUP RAM: %#X \t Preset 1: %#X \t Preset 2: %#X\n",&backup_preset, (uint32_t* )&user_preset[0], &user_preset[1]);
 }
 
-void c_menu::init_DSP_settings(void){
+void c_menu::send_settings_DSP(void){
 
 	//Transmit encoder settings
 	uint8_t i,j;
@@ -63,7 +64,7 @@ void c_menu::init_DSP_settings(void){
 		for(j=0;j<n_enc_menu;j++){
 			send_word.f32=banks[i].enc[j].value;
 			com.send_update(i,0,j,send_word);
-			HAL_Delay(50);	//This is important because the DSP target is interrupt driven and the data can be lost
+			HAL_Delay(5);	//This is important because the DSP target is interrupt driven and the data can be lost
 		}
 	}
 
@@ -261,17 +262,20 @@ void c_menu::save_preset_to_RAM(s_preset *preset, uint32_t address){
 		}
 	}
 
-	printf("Copying from: %#X to adress: %#X, size: %d\n",&preset, address, sizeof(*preset) );
-	memcpy((uint8_t*)address, &preset,sizeof(preset));
+//	printf("Address of backup preset is: %#X\n",(uint32_t* ) &backup_preset);
+//
+//	printf("Copying from: %#X to adress: %#X, size: %d\n",preset, address, sizeof(*preset) );
+	memcpy((uint8_t*)address, preset, sizeof(*preset));
 }
 
 
 void c_menu::load_preset_from_RAM(s_preset *preset, uint32_t address){
 
-	memcpy(preset, (uint8_t*)address ,sizeof(backup_preset));
+//	printf("Loading from: %#X to adress: %#X, size: %d\n",address,preset, sizeof(*preset) );
+	memcpy(preset, (uint8_t*)address ,sizeof(*preset));
 
 	//Load active bits
-	active_bits=preset.active_bits;
+	active_bits=preset->active_bits;
 
 	//Startup: Deactivate tuner always at startup
 	active_bits&=(~(1<<bankid_tuner));
@@ -283,15 +287,15 @@ void c_menu::load_preset_from_RAM(s_preset *preset, uint32_t address){
 //	mute_state=backup_preset.mute_state;
 
 	//Load active bank
-	act_bank=preset.act_bank;
+	act_bank=preset->act_bank;
 
 	//Load encoder values
 	uint8_t i,j;
 
 	for(i=0;i<n_bank;i++){
 		for(j=0;j<n_enc_menu;j++){
-			if(preset.encval[i][j] <= banks[i].enc[j].max && preset.encval[i][j] >= banks[i].enc[j].min){
-				banks[i].enc[j].value=preset.encval[i][j];
+			if(preset->encval[i][j] <= banks[i].enc[j].max && preset->encval[i][j] >= banks[i].enc[j].min){
+				banks[i].enc[j].value=preset->encval[i][j];
 			}
 		}
 	}
@@ -312,38 +316,12 @@ void c_menu::exp_pedal_update(uint16_t val){
 
 void c_menu::update_fs0(bool val){
 
-	//Update the value
-	banks[fs0_bank].but[0].value=val;
-
-	//Update active bits
-	send_word.u32=update_active_bits(fs0_bank,val);
-
-	//Update the GUI
-	if(fs0_bank==act_bank){
-		GUI.update_but_value(i_activate_button,banks[fs0_bank].but[i_activate_button].type,banks[fs0_bank].but[i_activate_button].status,val);
-	}
-
-	//Transmit the change to the DSP-uC
-	com.send_update(fs0_bank,1,0,send_word);
-
+	load_user_preset(0);
 }
 
 void c_menu::update_fs1(bool val){
 
-	//Update the value
-	banks[fs1_bank].but[0].value=val;
-
-	//Update active bits
-	send_word.u32=update_active_bits(fs1_bank,val);
-
-	//Update the GUI
-	if(fs1_bank==act_bank){
-		GUI.update_but_value(i_activate_button,banks[fs1_bank].but[i_activate_button].type,banks[fs1_bank].but[i_activate_button].status,val);
-	}
-
-	//Transmit the change to the DSP-uC
-	com.send_update(fs1_bank,1,0,send_word);
-
+	load_user_preset(1);
 }
 
 void c_menu::init_tap(void){
@@ -436,13 +414,19 @@ void  c_menu::save_user_preset(uint8_t i_preset){
 	save_preset_to_RAM(&user_preset[i_preset], ADDRESS_USER_PRESETS + i_preset*MAX_SIZE_PRESET);
 
 	//Show save message
-	GUI.update_but_value(i_save_button_0,but_type_save,1,0);
+	GUI.update_but_value(but_type_save+i_preset,but_type_save,1,0);
 }
 
 void  c_menu::load_user_preset(uint8_t i_preset){
 
-	//Save to RAM
+	//Load from RAM
 	load_preset_from_RAM(&user_preset[i_preset], ADDRESS_USER_PRESETS + i_preset*MAX_SIZE_PRESET);
+
+	//Send settings
+	send_settings_DSP();
+
+	//GUI Update
+	update_ui_context(0);
 
 }
 
