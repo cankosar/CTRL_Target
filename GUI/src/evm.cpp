@@ -212,12 +212,25 @@ void c_evm::process(void){
 					last_but_id=i;					//Button id
 
 					/*******BEGIN Process button changes********/
-					if(last_but_id==4){
-						menu.toggle_dsp();
-					}else if(last_but_id==5){
-						menu.toggle_mute();
-					}else{
-						menu.update_button(last_but_id);
+					switch(last_but_id){
+						case(0):
+							menu.toggle_active_button();
+							break;
+						case(1):
+							menu.process_tap();
+							break;
+						case(2):
+							menu.save_user_preset(0);
+							break;
+						case(3):
+							menu.save_user_preset(1);
+							break;
+						case(4):
+							menu.toggle_dsp();
+							break;
+						case(5):
+							menu.toggle_mute();
+							break;
 					}
 
 					/*******END Process button changes********/

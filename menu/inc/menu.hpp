@@ -14,6 +14,10 @@
 #include "../../com/inc/com_ctrl.hpp"
 #include "../../../common/common.hpp"
 
+//Addresses of the presets on backup SRAM
+#define MAX_SIZE_PRESET 500u	//Max size=500Bytes
+#define ADDRESS_BACKUP_PRESET 	BKPSRAM_BASE
+#define ADDRESS_USER_PRESETS 		BKPSRAM_BASE+MAX_SIZE_PRESET
 
 #define i_general 	0
 #define i_tuner 	1
@@ -43,10 +47,6 @@ struct s_preset{
 	//Active bits
 	uint32_t active_bits;
 
-	//States
-	bool dsp_state;
-	bool mute_state;
-
 	//Active bank
 	uint8_t act_bank;
 
@@ -64,7 +64,7 @@ class c_menu{
 		void init(void);
 		void load_presets(void);
 		void update_encoder(uint8_t eid, int8_t val);
-		void update_button(uint8_t bid);
+		void toggle_active_button(void);
 		void init_ui_context(void);
 		void update_ui_context(int8_t val);
 		void toggle_dsp(void);
@@ -73,6 +73,9 @@ class c_menu{
 		void update_fs0(bool val);
 		void update_fs1(bool val);
 		void save_backup(void);
+		void process_tap(void);
+		void save_user_preset(uint8_t i_preset);
+		void load_user_preset(uint8_t i_preset);
 
 		//States
 		bool mute_state;
@@ -88,14 +91,18 @@ class c_menu{
 	private:
 
 		//Presets
+		void save_preset_to_RAM(s_preset *preset, uint32_t address);
+		void load_preset_from_RAM(s_preset *preset, uint32_t address);
 
-		void load_backup(void);
+		s_preset backup_preset;
+		s_preset user_preset[2];
+
+
 		void load_active_banks(uint32_t active_bits);
 		void init_DSP_settings(void);
 
 		//Tapping
 		void init_tap(void);
-		void process_tap(void);
 		void reset_tap_maf_buffer(void);
 		uint32_t 	last_tap;
 //		uint32_t 	min_dist;
@@ -107,7 +114,7 @@ class c_menu{
 		uint32_t maf_tap_buf[l_maf_tap];
 		uint8_t valid_taps;
 
-		s_preset backup_preset;
+
 
 		inline uint8_t mod_positive(int a, int b) { return (a % b + b) % b; }
 		uint32_t update_active_bits(uint8_t bank_id, bool val);

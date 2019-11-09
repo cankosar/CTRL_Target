@@ -135,7 +135,7 @@ void c_GUI::update_but_value(uint8_t id, bool type, bool status, bool flag){
 	disp.set_text_size(W_F_VAL);
 
 	if(status){
-		if(type==0){
+		if(type==but_type_activate){
 			//Type is standard toggle
 			if(flag){
 				disp.set_text_color(COL_ACTIVE,COL_BG);
@@ -146,10 +146,17 @@ void c_GUI::update_but_value(uint8_t id, bool type, bool status, bool flag){
 				//Print text
 				disp.print_static((char*)"Off",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
 			}
-		}else if(type==1){
+		}else if(type==but_type_tap){
 			//Type is TAP
 			disp.set_text_color(COL_INACTIVE,COL_BG);
 			disp.print_static((char*)"REC",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
+			HAL_Delay(200);
+			disp.print_static((char*)"",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
+
+		}else if(type==but_type_save){
+			//Type is save
+			disp.set_text_color(COL_INACTIVE,COL_BG);
+			disp.print_static((char*)"SAVED",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
 			HAL_Delay(200);
 			disp.print_static((char*)"",dx_but[id],DP_HEIGHT-DY_VAL,MAX_CHAR_BUT);
 		}

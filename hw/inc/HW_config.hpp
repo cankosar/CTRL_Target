@@ -71,7 +71,7 @@
 #define n_but 6
 
 #define n_enc_menu 3
-#define n_but_menu 4
+#define n_but_menu 2
 
 //Foot switch
 #define FS_PORT 	GPIOD

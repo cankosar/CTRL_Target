@@ -59,15 +59,6 @@ void c_menu::load_presets(void){
 	banks[i_general].but[1].status=	0;
 	banks[i_general].but[1].value=	1;
 
-	//Button 2
-	banks[i_general].but[2].name=	"";
-	banks[i_general].but[2].status=	0;
-	banks[i_general].but[2].value=	1;
-
-	//Button 3
-	banks[i_general].but[3].name=	"";
-	banks[i_general].but[3].status=	0;
-	banks[i_general].but[3].value=	1;
 
 	/*
 			Bank 0: Tuner
@@ -125,15 +116,6 @@ void c_menu::load_presets(void){
 	banks[i_lowshelf].but[1].status=	0;
 	banks[i_lowshelf].but[1].value=		0;
 
-	//Button 2
-	banks[i_lowshelf].but[2].name=		"";
-	banks[i_lowshelf].but[2].status=	0;
-	banks[i_lowshelf].but[2].value=		0;
-
-	//Button 3
-	banks[i_lowshelf].but[3].name=		"";
-	banks[i_lowshelf].but[3].status=	0;
-	banks[i_lowshelf].but[3].value=		0;
 
 	/*
 			Bank 2: Low mid
@@ -179,15 +161,6 @@ void c_menu::load_presets(void){
 	banks[i_lowmid].but[1].status=	0;
 	banks[i_lowmid].but[1].value=	0;
 
-	//Button 2
-	banks[i_lowmid].but[2].name=	"";
-	banks[i_lowmid].but[2].status=	0;
-	banks[i_lowmid].but[2].value=	0;
-
-	//Button 3
-	banks[i_lowmid].but[3].name=	"";
-	banks[i_lowmid].but[3].status=	0;
-	banks[i_lowmid].but[3].value=	0;
 
 	/*
 			Bank 4: Mid
@@ -233,15 +206,6 @@ void c_menu::load_presets(void){
 	banks[i_mid].but[1].status=		0;
 	banks[i_mid].but[1].value=		0;
 
-	//Button 2
-	banks[i_mid].but[2].name=		"";
-	banks[i_mid].but[2].status=		0;
-	banks[i_mid].but[2].value=		0;
-
-	//Button 3
-	banks[i_mid].but[3].name=		"";
-	banks[i_mid].but[3].status=		0;
-	banks[i_mid].but[3].value=		0;
 
 	/*
 			Bank 5: High middle
@@ -287,15 +251,6 @@ void c_menu::load_presets(void){
 	banks[i_highmid].but[1].status=	0;
 	banks[i_highmid].but[1].value=	0;
 
-	//Button 2
-	banks[i_highmid].but[2].name=	"";
-	banks[i_highmid].but[2].status=	0;
-	banks[i_highmid].but[2].value=	0;
-
-	//Button 3
-	banks[i_highmid].but[3].name=	"";
-	banks[i_highmid].but[3].status=	0;
-	banks[i_highmid].but[3].value=	0;
 
 	/*
 			Bank 1: High Shelf
@@ -340,16 +295,6 @@ void c_menu::load_presets(void){
 	banks[i_highshelf].but[1].name=		"";
 	banks[i_highshelf].but[1].status=	0;
 	banks[i_highshelf].but[1].value=	0;
-
-	//Button 2
-	banks[i_highshelf].but[2].name=		"";
-	banks[i_highshelf].but[2].status=	0;
-	banks[i_highshelf].but[2].value=	0;
-
-	//Button 3
-	banks[i_highshelf].but[3].name=		"";
-	banks[i_highshelf].but[3].status=	0;
-	banks[i_highshelf].but[3].value=	0;
 
 	/*
 			Bank 7: Delay
@@ -396,16 +341,6 @@ void c_menu::load_presets(void){
 	banks[i_delay].but[1].value=	0;
 	banks[i_delay].but[1].type=		1;
 
-	//Button 2
-	banks[i_delay].but[2].name=		"";
-	banks[i_delay].but[2].status=	0;
-	banks[i_delay].but[2].value=	0;
-
-	//Button 3
-	banks[i_delay].but[3].name=		"";
-	banks[i_delay].but[3].status=	0;
-	banks[i_delay].but[3].value=	0;
-
 	/*
 			Bank 8: Chorus
 	*/
@@ -449,16 +384,6 @@ void c_menu::load_presets(void){
 	banks[i_chorus].but[1].name=	"";
 	banks[i_chorus].but[1].status=	0;
 	banks[i_chorus].but[1].value=	0;
-
-	//Button 2
-	banks[i_chorus].but[2].name=	"";
-	banks[i_chorus].but[2].status=	0;
-	banks[i_chorus].but[2].value=	0;
-
-	//Button 3
-	banks[i_chorus].but[3].name=	"";
-	banks[i_chorus].but[3].status=	0;
-	banks[i_chorus].but[3].value=	0;
 
 	/*
 			Bank 8: Overdrive
@@ -504,15 +429,6 @@ void c_menu::load_presets(void){
 	banks[i_overdrive].but[1].status=	0;
 	banks[i_overdrive].but[1].value=	0;
 
-	//Button 2
-	banks[i_overdrive].but[2].name=		"";
-	banks[i_overdrive].but[2].status=	0;
-	banks[i_overdrive].but[2].value=	0;
-
-	//Button 3
-	banks[i_overdrive].but[3].name=		"";
-	banks[i_overdrive].but[3].status=	0;
-	banks[i_overdrive].but[3].value=	0;
 
 	/*
 			Bank 8: Reverb
@@ -558,15 +474,6 @@ void c_menu::load_presets(void){
 	banks[i_reverb].but[1].status=	0;
 	banks[i_reverb].but[1].value=	0;
 
-	//Button 2
-	banks[i_reverb].but[2].name=	"";
-	banks[i_reverb].but[2].status=	0;
-	banks[i_reverb].but[2].value=	0;
-
-	//Button 3
-	banks[i_reverb].but[3].name=	"";
-	banks[i_reverb].but[3].status=	0;
-	banks[i_reverb].but[3].value=	0;
 
 	/*
 			Bank 11: Compressor
@@ -612,15 +519,6 @@ void c_menu::load_presets(void){
 	banks[i_comp].but[1].status=	0;
 	banks[i_comp].but[1].value=		0;
 
-	//Button 2
-	banks[i_comp].but[2].name=		"";
-	banks[i_comp].but[2].status=	0;
-	banks[i_comp].but[2].value=		0;
-
-	//Button 3
-	banks[i_comp].but[3].name=		"";
-	banks[i_comp].but[3].status=	0;
-	banks[i_comp].but[3].value=		0;
 
 	/*
 			Bank 12: Tremolo
@@ -666,15 +564,6 @@ void c_menu::load_presets(void){
 	banks[i_tremolo].but[1].status=	0;
 	banks[i_tremolo].but[1].value=	0;
 
-	//Button 2
-	banks[i_tremolo].but[2].name=	"";
-	banks[i_tremolo].but[2].status=	0;
-	banks[i_tremolo].but[2].value=	0;
-
-	//Button 3
-	banks[i_tremolo].but[3].name=	"";
-	banks[i_tremolo].but[3].status=	0;
-	banks[i_tremolo].but[3].value=	0;
 
 	/*
 			Bank 13: Rotary
@@ -720,16 +609,6 @@ void c_menu::load_presets(void){
 	banks[i_rotary].but[1].status=	0;
 	banks[i_rotary].but[1].value=	0;
 
-	//Button 2
-	banks[i_rotary].but[2].name=	"";
-	banks[i_rotary].but[2].status=	0;
-	banks[i_rotary].but[2].value=	0;
-
-	//Button 3
-	banks[i_rotary].but[3].name=	"";
-	banks[i_rotary].but[3].status=	0;
-	banks[i_rotary].but[3].value=	0;
-
 	/*
 			Bank 14: Flanger
 	*/
@@ -774,15 +653,6 @@ void c_menu::load_presets(void){
 	banks[i_flanger].but[1].status=	0;
 	banks[i_flanger].but[1].value=	0;
 
-	//Button 2
-	banks[i_flanger].but[2].name=	"";
-	banks[i_flanger].but[2].status=	0;
-	banks[i_flanger].but[2].value=	0;
-
-	//Button 3
-	banks[i_flanger].but[3].name=	"";
-	banks[i_flanger].but[3].status=	0;
-	banks[i_flanger].but[3].value=	0;
 
 	/*
 			Bank 15: Autowah
@@ -828,16 +698,6 @@ void c_menu::load_presets(void){
 	banks[i_autowah].but[1].status=		0;
 	banks[i_autowah].but[1].value=		0;
 
-	//Button 2
-	banks[i_autowah].but[2].name=		"";
-	banks[i_autowah].but[2].status=		0;
-	banks[i_autowah].but[2].value=		0;
-
-	//Button 3
-	banks[i_autowah].but[3].name=		"";
-	banks[i_autowah].but[3].status=		0;
-	banks[i_autowah].but[3].value=		0;
-
 	/*
 			Bank 16: WahWah
 	*/
@@ -882,15 +742,6 @@ void c_menu::load_presets(void){
 	banks[i_wahwah].but[1].status=		0;
 	banks[i_wahwah].but[1].value=		0;
 
-	//Button 2
-	banks[i_wahwah].but[2].name=		"";
-	banks[i_wahwah].but[2].status=		0;
-	banks[i_wahwah].but[2].value=		0;
-
-	//Button 3
-	banks[i_wahwah].but[3].name=		"";
-	banks[i_wahwah].but[3].status=		0;
-	banks[i_wahwah].but[3].value=		0;
 }
 
 
